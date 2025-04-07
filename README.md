@@ -1,5 +1,3 @@
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" class="logo" width="120"/>
-
 # 기본 화면 레이아웃
 
 - 상단 바 : 날짜 선택기, 설정 및 프로필 접근
