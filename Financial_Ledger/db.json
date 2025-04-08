@@ -131,9 +131,9 @@
     {
       "id": "13",
       "userId": "5678",
-      "income": false,
-      "outcome": true,
-      "expense": 14000,
+      "income": true,
+      "outcome": false,
+      "expense": 5000,
       "category": "식비",
       "date": "2025-04-05",
       "type": "지출",
@@ -149,22 +149,92 @@
       "date": "2025-04-08"
     },
     {
-      "id": "15",
-      "userId": "5678",
-      "income": false,
-      "outcome": true,
-      "expense": 5000,
-      "category": "교통비",
-      "date": "2025-04-10",
-      "memo": "택시비"
-    },
-    {
       "id": "0130",
       "userId": "1234",
       "date": "",
       "expense": 0,
       "category": "",
       "memo": "",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "97d1",
+      "userId": "1234",
+      "date": "",
+      "expense": 1,
+      "category": "용돈",
+      "memo": "",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "f06a",
+      "userId": "1234",
+      "date": "2025-04-09",
+      "expense": 1,
+      "category": "용돈",
+      "memo": "",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "78d3",
+      "userId": "1234",
+      "date": "2025-04-09",
+      "expense": 2,
+      "category": "용돈",
+      "memo": "dydehs",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "0817",
+      "userId": "1234",
+      "date": "",
+      "expense": 0,
+      "category": "",
+      "memo": "",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "b87b",
+      "userId": "1234",
+      "date": "2025-04-09",
+      "expense": 41000,
+      "category": "월급",
+      "memo": "",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "19cd",
+      "userId": "1234",
+      "date": "2025-04-09",
+      "expense": 700,
+      "category": "월급",
+      "memo": "apdh",
+      "income": false,
+      "outcome": true
+    },
+    {
+      "id": "d337",
+      "userId": "1234",
+      "date": "2025-04-09",
+      "expense": 4000,
+      "category": "월급",
+      "memo": "용돈이다",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "2ef3",
+      "userId": "5678",
+      "date": "2025-04-09",
+      "expense": 700,
+      "category": "월급",
+      "memo": "용돈이아다다다ㅏ",
       "income": true,
       "outcome": false
     }

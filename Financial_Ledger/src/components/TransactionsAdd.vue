@@ -53,12 +53,13 @@
 
 <script>
 export default {
+  props: ['userId'],
   data() {
     return {
       transactionType: 'income',
       // 사용자 지정해둠 로그인 구현 완료 후 진행
       form: {
-        userId: '1234',
+        userId: this.userId,
         date: '',
         expense: 0,
         category: '',

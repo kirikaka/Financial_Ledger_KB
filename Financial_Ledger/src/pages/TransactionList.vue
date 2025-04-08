@@ -111,6 +111,7 @@
         />
         <TransactionsAdd
           v-if="showAddModal"
+          :user-id="currentUserId"
           @close="showAddModal = false"
           @added="fetchTransactions"
         />
@@ -144,7 +145,7 @@
       fetch(`http://localhost:3000/members/${this.currentUserId}`)
         .then((res) => res.json())
         .then((user) => {
-          this.currentUser = user;
+          this.transactions = user;
         })
         .catch((err) => console.error(err));
 
