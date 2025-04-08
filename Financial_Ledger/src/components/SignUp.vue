@@ -33,11 +33,14 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const name = ref('');
 const email = ref('');
 const password = ref('');
 const showPassword = ref(false);
+
+const router = useRouter();
 
 function togglePassword() {
   showPassword.value = !showPassword.value;
@@ -57,6 +60,8 @@ async function handleSignUp() {
     name.value = '';
     email.value = '';
     password.value = '';
+
+    router.push('/');
   } catch (error) {
     console.error('회원가입 실패', error);
     alert('회원가입 중 오류 발생!');
