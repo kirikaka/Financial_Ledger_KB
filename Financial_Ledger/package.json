@@ -10,9 +10,14 @@
   },
   "dependencies": {
     "axios": "^1.8.4",
+<<<<<<< HEAD
+=======
+    "chart.js": "^4.4.8",
+>>>>>>> b902a99 (axios설치 추가 및 index.jfs 경로 추가)
     "json-server": "^1.0.0-beta.3",
     "pinia": "^3.0.1",
     "vue": "^3.5.13",
+    "vue-chartjs": "^5.3.2",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
