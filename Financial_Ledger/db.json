@@ -19,9 +19,10 @@
       "userId": "1234",
       "income": true,
       "outcome": false,
-      "expense": 3000000,
-      "category": "월급",
-      "date": "2025-04-01"
+      "expense": 100000,
+      "category": "용돈",
+      "date": "2025-04-10",
+      "memo": "개꿀"
     },
     {
       "id": "2",
@@ -41,7 +42,6 @@
       "category": "금융소득",
       "date": "2025-04-12"
     },
-
     {
       "id": "4",
       "userId": "1234",
@@ -96,7 +96,6 @@
       "category": "기타",
       "date": "2025-04-11"
     },
-
     {
       "id": "10",
       "userId": "5678",
@@ -104,7 +103,9 @@
       "outcome": false,
       "expense": 2800000,
       "category": "월급",
-      "date": "2025-04-01"
+      "date": "2025-04-01",
+      "type": "수입",
+      "memo": "태현님이 용돈주셨다!"
     },
     {
       "id": "11",
@@ -113,9 +114,9 @@
       "outcome": false,
       "expense": 120000,
       "category": "부수입",
-      "date": "2025-04-06"
+      "date": "2025-04-06",
+      "type": "수입"
     },
-
     {
       "id": "12",
       "userId": "5678",
@@ -123,16 +124,20 @@
       "outcome": true,
       "expense": 45000,
       "category": "식비",
-      "date": "2025-04-02"
+      "date": "2025-04-02",
+      "type": "지출",
+      "memo": ""
     },
     {
       "id": "13",
       "userId": "5678",
       "income": false,
       "outcome": true,
-      "expense": 28000,
-      "category": "교통",
-      "date": "2025-04-05"
+      "expense": 14000,
+      "category": "식비",
+      "date": "2025-04-05",
+      "type": "지출",
+      "memo": "혼다 라멘"
     },
     {
       "id": "14",
@@ -148,9 +153,20 @@
       "userId": "5678",
       "income": false,
       "outcome": true,
-      "expense": 110000,
-      "category": "패션",
-      "date": "2025-04-12"
+      "expense": 5000,
+      "category": "교통비",
+      "date": "2025-04-10",
+      "memo": "택시비"
+    },
+    {
+      "id": "0130",
+      "userId": "1234",
+      "date": "",
+      "expense": 0,
+      "category": "",
+      "memo": "",
+      "income": true,
+      "outcome": false
     }
   ]
 }
