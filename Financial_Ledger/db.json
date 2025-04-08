@@ -237,6 +237,120 @@
       "memo": "용돈이아다다다ㅏ",
       "income": true,
       "outcome": false
+    },
+    {
+      "id": "9b05",
+      "userId": "5678",
+      "date": "2025-04-08",
+      "expense": 500000,
+      "category": "용돈",
+      "memo": "병현쓰가 준 선물",
+      "income": true,
+      "outcome": false,
+      "type": "수입"
+    },
+    {
+      "id": "1ef2",
+      "userId": "5678",
+      "date": "2025-04-08",
+      "expense": 40000,
+      "category": "교통비",
+      "memo": "",
+      "income": false,
+      "outcome": true,
+      "type": "지출"
+    },
+    {
+      "id": "5894",
+      "userId": "5678",
+      "date": "2025-04-09",
+      "expense": 70000,
+      "category": "용돈",
+      "memo": "",
+      "income": true,
+      "outcome": false,
+      "type": "수입"
+    },
+    {
+      "id": "443b",
+      "userId": "5678",
+      "date": "2025-04-08",
+      "expense": 20000,
+      "category": "식비",
+      "memo": "",
+      "income": false,
+      "outcome": true,
+      "type": "지출"
+    },
+    {
+      "id": "b275",
+      "userId": "5678",
+      "date": "2025-04-09",
+      "expense": 50000,
+      "category": "용돈",
+      "memo": "",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "683a",
+      "userId": "5678",
+      "date": "2025-04-09",
+      "expense": 25,
+      "category": "기타",
+      "memo": "",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "bb52",
+      "userId": "5678",
+      "date": "2025-04-09",
+      "expense": 3000,
+      "category": "용돈",
+      "memo": "",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "dea7",
+      "userId": "5678",
+      "date": "2025-04-11",
+      "expense": 7000,
+      "category": "교통비",
+      "memo": "",
+      "income": false,
+      "outcome": true
+    },
+    {
+      "id": "d374",
+      "userId": "5678",
+      "date": "2025-04-08",
+      "expense": 9000000,
+      "category": "교통비",
+      "memo": "",
+      "income": false,
+      "outcome": true
+    },
+    {
+      "id": "b73e",
+      "userId": "5678",
+      "date": "2025-04-10",
+      "expense": 25000000,
+      "category": "식비",
+      "memo": "",
+      "income": false,
+      "outcome": true
+    },
+    {
+      "id": "69d1",
+      "userId": "5678",
+      "date": "2025-04-09",
+      "expense": 55,
+      "category": "식비",
+      "memo": "",
+      "income": false,
+      "outcome": true
     }
   ]
 }

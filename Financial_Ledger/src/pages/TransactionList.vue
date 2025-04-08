@@ -145,9 +145,11 @@
       fetch(`http://localhost:3000/members/${this.currentUserId}`)
         .then((res) => res.json())
         .then((user) => {
-          this.transactions = user;
+          this.currentUser = user;
         })
         .catch((err) => console.error(err));
+
+      this.fetchTransactions();
 
       fetch('http://localhost:3000/transactions')
         .then((res) => res.json())
@@ -293,10 +295,14 @@
       });
       },
       fetchTransactions() {
-        fetch('http://localhost:3000/transactions')
+        fetch(`http://localhost:3000/transactions?userId=${this.currentUserId}`)
           .then(res => res.json())
-          .then(data => this.transactions = data);
-      },
+          .then(data => {
+            this.transactions = data;
+          })
+          .catch(err => console.error(err));
+      }
+
     },
   };
   </script>
