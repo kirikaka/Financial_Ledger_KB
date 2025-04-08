@@ -3,7 +3,7 @@
         {"id": "1234", "email": "1234@naver.com", "password": "1234", "name": "KB"},
         {"id": "5678", "email": "5678@naver.com", "password": "5678", "name": "WOORI"}
     ],
-    "transactioins": [
+    "transactions": [
         {"id": "1", "userId": "1234", "income": true, "outcome": false, "expense": 100000, "category": "용돈", "date": "2025-04-10", "memo": "개꿀"},
         {"id": "2", "userId": "5678", "income": false, "outcome": true, "expense": 5000, "category": "교통비", "date": "2025-04-10", "memo": "택시비"}
     ]
