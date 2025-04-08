@@ -28,19 +28,44 @@
 
 <script setup>
 import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const email = ref('');
 const password = ref('');
 const showPassword = ref(false);
+const router = useRouter();
 
 function togglePassword() {
   showPassword.value = !showPassword.value;
 }
 
-function handleLogin() {
-  console.log('이메일:', email.value);
-  console.log('비밀번호:', password.value);
-  // 로그인 처리 로직 추가 예정
+async function handleLogin() {
+  try {
+    const res = await axios.get('http://localhost:3001/members');
+    const members = res.data;
+
+    const user = members.find((member) => member.email === email.value);
+
+    if (!user) {
+      alert('없는 아이디입니다.');
+      return;
+    }
+
+    if (user.password !== password.value) {
+      alert('일치하지 않는 비밀번호입니다.');
+      return;
+    }
+
+    alert('로그인 성공!');
+
+    localStorage.setItem('userId', user.id);
+
+    router.push('/home');
+  } catch (error) {
+    console.error('로그인 오류:', error);
+    alert('서버 오류가 발생했습니다.');
+  }
 }
 </script>
 
