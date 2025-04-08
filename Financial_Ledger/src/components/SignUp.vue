@@ -32,19 +32,40 @@
 
 <script setup>
 import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const name = ref('');
 const email = ref('');
 const password = ref('');
 const showPassword = ref(false);
 
+const router = useRouter();
+
 function togglePassword() {
   showPassword.value = !showPassword.value;
 }
 
-function handleSignUp() {
-  console.log('회원가입:', name.value, email.value, password.value);
-  // 회원가입 처리 로직
+async function handleSignUp() {
+  const memberData = {
+    name: name.value,
+    email: email.value,
+    password: password.value,
+  };
+
+  try {
+    const res = await axios.post('http://localhost:3001/members', memberData);
+    console.log('회원가입 성공!', res.data);
+    alert('회원가입 완료!');
+    name.value = '';
+    email.value = '';
+    password.value = '';
+
+    router.push('/');
+  } catch (error) {
+    console.error('회원가입 실패', error);
+    alert('회원가입 중 오류 발생!');
+  }
 }
 </script>
 

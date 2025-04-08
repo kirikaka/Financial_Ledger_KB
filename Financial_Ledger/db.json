@@ -35,4 +35,4 @@
       { "id": "14", "userId": "5678", "income": false, "outcome": true, "expense": 60000, "category": "생활비", "date": "2025-04-08" },
       { "id": "15", "userId": "5678", "income": false, "outcome": true, "expense": 110000, "category": "패션", "date": "2025-04-12" }
     ]
-  }
+}
