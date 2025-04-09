@@ -1,23 +1,14 @@
 <template>
   <div class="container">
-    <div class="sidebar">
-      <div class="profile">
-        <h2>금쪽이</h2>
-      </div>
-      <div>
-        <div class="sidebar-nav">
-          <button class="moveTL-btn">최근 거래 내역 확인</button>
-          <button class="add-asset-btn">빠른 거래 추가</button>
-          <div class="balance-summary">
-            <p>수입: {{ incomeTotalFormatted }}</p>
-            <p>지출: {{ expenseTotalFormatted }}</p>
-            <p>순이익: {{ netProfitFormatted }}</p>
-          </div>
-        </div>
-      </div>
-      <button class="logout-btn">Logout</button>
-    </div>
+    <!-- Sidebar 컴포넌트 -->
+    <Sidebar
+      v-if="currentUser.id && currentUser.name"
+      :userId="currentUser.id"
+      :userName="currentUser.name"
+      @logout="handleLogout"
+    />
 
+    <!-- 메인 콘텐츠 -->
     <div class="main-content">
       <h1 class="header-title">{{ currentUser.name }}의 거래 내역</h1>
 
@@ -102,139 +93,181 @@
   </div>
 </template>
 
-<script>
+<script setup>
+// Sidebar 컴포넌트 import
 import '../assets/TL.css';
+import Sidebar from '@/components/Sidebar.vue';
 
-export default {
-  name: 'TransactionList',
-  data() {
-    return {
-      currentUserId: '1234',
-      currentUser: {},
-      transactions: [],
-      activeTab: '전체',
-      currentDate: new Date(2025, 3, 1),
-    };
-  },
-  mounted() {
-    fetch(`http://localhost:3000/members/${this.currentUserId}`)
-      .then((res) => res.json())
-      .then((user) => {
-        this.currentUser = user;
-      })
-      .catch((err) => console.error(err));
+import { ref, computed, onMounted } from 'vue';
 
-    fetch(`http://localhost:3000/transactions?userId=${this.currentUserId}`)
-      .then((res) => res.json())
-      .then((transactions) => {
-        this.transactions = transactions;
-      })
-      .catch((err) => console.error(err));
-  },
-  computed: {
-    userTransactions() {
-      return this.transactions
-        .filter((txn) => txn.userId === this.currentUserId)
-        .map((txn) => {
-          if (txn.income && !txn.outcome) {
-            txn.type = '수입';
-          } else if (!txn.income && txn.outcome) {
-            txn.type = '지출';
-          } else {
-            txn.type = '알 수 없음';
-          }
-          return txn;
-        });
-    },
-    filteredTransactions() {
-      const currentYear = this.currentDate.getFullYear();
-      const currentMonth = this.currentDate.getMonth();
-      let trans = this.userTransactions.filter((txn) => {
-        const txnDate = new Date(txn.date);
-        return (
-          txnDate.getFullYear() === currentYear &&
-          txnDate.getMonth() === currentMonth
-        );
-      });
-      if (this.activeTab !== '전체') {
-        trans = trans.filter((txn) => txn.type === this.activeTab);
-      }
-      return trans;
-    },
-    monthDisplay() {
-      const monthNames = [
-        'JAN',
-        'FEB',
-        'MAR',
-        'APR',
-        'MAY',
-        'JUN',
-        'JUL',
-        'AUG',
-        'SEP',
-        'OCT',
-        'NOV',
-        'DEC',
-      ];
-      const d = this.currentDate;
-      return `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
-    },
-    incomeTotal() {
-      return this.userTransactions
-        .filter((txn) => txn.type === '수입')
-        .reduce((acc, txn) => acc + txn.expense, 0);
-    },
-    expenseTotal() {
-      return this.userTransactions
-        .filter((txn) => txn.type === '지출')
-        .reduce((acc, txn) => acc + txn.expense, 0);
-    },
-    netProfit() {
-      return this.incomeTotal - this.expenseTotal;
-    },
-    incomeTotalFormatted() {
-      return this.formatCurrency(this.incomeTotal);
-    },
-    expenseTotalFormatted() {
-      return this.formatCurrency(this.expenseTotal);
-    },
-    netProfitFormatted() {
-      return this.formatCurrency(this.netProfit);
-    },
-  },
-  methods: {
-    editTransaction(transaction) {
-      alert('수정 기능: ' + JSON.stringify(transaction));
-    },
-    deleteTransaction(transaction) {
-      fetch(`http://localhost:3000/transactions/${transaction.id}`, {
-        method: 'DELETE',
-      })
-        .then((response) => {
-          if (response.ok) {
-            this.transactions = this.transactions.filter(
-              (txn) => txn.id !== transaction.id
-            );
-          } else {
-            throw new Error('삭제 실패');
-          }
-        })
-        .catch((err) => console.error(err));
-    },
-    loadMore() {
-      alert('더 많은 거래 내역을 불러옵니다.');
-    },
-    prevMonth() {
-      const d = this.currentDate;
-      this.currentDate = new Date(d.getFullYear(), d.getMonth() - 1, 1);
-    },
-    nextMonth() {
-      const d = this.currentDate;
-      this.currentDate = new Date(d.getFullYear(), d.getMonth() + 1, 1);
-    },
-    formatCurrency(amount) {
-      return Number(amount).toLocaleString();
-    },
-  },
+// 사용자 ID 및 상태 관리
+const currentUserId = ref('1234'); // 현재 로그인된 사용자 ID
+const currentUser = ref({}); // 현재 사용자 정보
+const transactions = ref([]); // 거래 내역
+const activeTab = ref('전체'); // 현재 활성 탭 (전체, 수입, 지출)
+const currentDate = ref(new Date(2025, 3, 1)); // 현재 날짜
+
+// 사용자 데이터 가져오기
+const fetchUserData = async () => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/members/${currentUserId.value}`
+    );
+    if (!response.ok)
+      throw new Error('사용자 데이터를 가져오는 데 실패했습니다.');
+    const user = await response.json();
+    currentUser.value = user;
+    console.log('🚀 ~ fetchUserData ~ currentUser:', currentUser.value);
+  } catch (err) {
+    console.error('사용자 데이터를 가져오는 중 오류 발생:', err);
+  }
 };
+
+// 거래 내역 가져오기
+const fetchTransactions = async () => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/transactions?userId=${currentUserId.value}`
+    );
+    if (!response.ok) throw new Error('거래 내역을 가져오는 데 실패했습니다.');
+    const data = await response.json();
+    transactions.value = data;
+    console.log('🚀 ~ fetchTransactions ~ transactions:', transactions.value);
+  } catch (err) {
+    console.error('거래 내역을 가져오는 중 오류 발생:', err);
+  }
+};
+
+// 페이지 로드 시 데이터 가져오기
+onMounted(() => {
+  fetchUserData();
+  fetchTransactions();
+});
+
+// 로그아웃 처리
+const handleLogout = () => {
+  console.log('로그아웃되었습니다.');
+};
+
+// 거래 내역 필터링 및 계산
+const userTransactions = computed(() =>
+  transactions.value.map((txn) => ({
+    ...txn,
+    type: txn.income ? '수입' : '지출',
+  }))
+);
+
+const filteredTransactions = computed(() => {
+  const currentYear = currentDate.value.getFullYear();
+  const currentMonth = currentDate.value.getMonth();
+
+  let trans = userTransactions.value.filter((txn) => {
+    const txnDate = new Date(txn.date);
+    return (
+      txnDate.getFullYear() === currentYear &&
+      txnDate.getMonth() === currentMonth
+    );
+  });
+
+  if (activeTab.value !== '전체') {
+    trans = trans.filter((txn) => txn.type === activeTab.value);
+  }
+
+  return trans;
+});
+
+const monthDisplay = computed(() => {
+  const monthNames = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC',
+  ];
+  const d = currentDate.value;
+  return `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+});
+
+// 총 수입, 총 지출, 순이익 계산
+const incomeTotalFormatted = computed(() =>
+  formatCurrency(
+    userTransactions.value
+      .filter((txn) => txn.type === '수입')
+      .reduce((acc, txn) => acc + txn.expense, 0)
+  )
+);
+
+const expenseTotalFormatted = computed(() =>
+  formatCurrency(
+    userTransactions.value
+      .filter((txn) => txn.type === '지출')
+      .reduce((acc, txn) => acc + txn.expense, 0)
+  )
+);
+
+const netProfitFormatted = computed(() =>
+  formatCurrency(
+    userTransactions.value
+      .filter((txn) => txn.type === '수입')
+      .reduce((acc, txn) => acc + txn.expense, 0) -
+      userTransactions.value
+        .filter((txn) => txn.type === '지출')
+        .reduce((acc, txn) => acc + txn.expense, 0)
+  )
+);
+
+// 거래 내역 수정 및 삭제
+const editTransaction = (transaction) => {
+  alert('수정 기능: ' + JSON.stringify(transaction));
+};
+
+const deleteTransaction = async (transaction) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/transactions/${transaction.id}`,
+      {
+        method: 'DELETE',
+      }
+    );
+    if (!response.ok) throw new Error('삭제 실패');
+
+    transactions.value = transactions.value.filter(
+      (txn) => txn.id !== transaction.id
+    );
+
+    console.log('거래가 성공적으로 삭제되었습니다.');
+  } catch (err) {
+    console.error('거래 삭제 중 오류 발생:', err);
+  }
+};
+
+// 월 이동 처리
+const prevMonth = () => {
+  const d = currentDate.value;
+  currentDate.value = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+};
+
+const nextMonth = () => {
+  const d = currentDate.value;
+  currentDate.value = new Date(d.getFullYear(), d.getMonth() + 1, 1);
+};
+
+// 통화 포맷팅 함수
+const formatCurrency = (amount) => Number(amount).toLocaleString();
 </script>
+
+<style scoped>
+.container {
+}
+.main-content {
+}
+.load-more-btn {
+}
+</style>
