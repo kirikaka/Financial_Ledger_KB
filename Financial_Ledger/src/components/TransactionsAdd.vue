@@ -30,13 +30,18 @@
         <select v-model="form.category">
           <optgroup v-if="transactionType === 'income'" label="수입">
             <option value="월급">월급</option>
-            <option value="용돈">용돈</option>
-            <option value="기타">기타</option>
+              <option value="부수입">부수입</option>
+              <option value="용돈">용돈</option>
+              <option value="금융소득">금융소득</option>
+              <option value="기타">기타</option>
           </optgroup>
           <optgroup v-if="transactionType === 'outcome'" label="지출">
             <option value="식비">식비</option>
-            <option value="교통비">교통비</option>
-            <option value="기타">기타</option>
+              <option value="교통">교통</option>
+              <option value="문화생활">문화생활</option>
+              <option value="생활비">생활비</option>
+              <option value="패션">패션</option>
+              <option value="기타">기타</option>
           </optgroup>
         </select>
       </label>
@@ -125,6 +130,7 @@ onMounted(() => {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
+  z-index: 1; /* z-index를 충분히 높게 설정 */
   display: flex;
   justify-content: center;
   align-items: center;

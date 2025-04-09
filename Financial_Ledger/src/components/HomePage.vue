@@ -6,6 +6,7 @@
       :userId="user.id"
       :userName="user.name"
       @logout="handleLogout"
+      @added="handleTransactionAdded"
     />
 
     <!-- 메인 콘텐츠 -->
@@ -53,6 +54,25 @@ const now = new Date();
 const currentMonth = `${now.getFullYear()}-${String(
   now.getMonth() + 1
 ).padStart(2, '0')}`;
+
+
+// ✅ 데이터 가져오기
+const fetchData = async () => {
+  try {
+    const [userRes, transactionsRes] = await Promise.all([
+      axios.get(`http://localhost:3000/members/${userId}`),
+      axios.get(`http://localhost:3000/transactions?userId=${userId}`),
+    ]);
+    user.value.name = userRes.data.name;
+    allTransactions.value = transactionsRes.data;
+  } catch (e) {
+    console.error('데이터 불러오기 실패:', e);
+  }
+};
+
+const handleTransactionAdded = (newTx) => {
+  allTransactions.value = [...allTransactions.value, newTx];
+};
 
 // 쿠키에서 토큰 추출
 function getCookie(name) {
