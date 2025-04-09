@@ -11,6 +11,7 @@
       "email": "woori@naver.com",
       "password": "5678",
       "name": "우리은행"
+
     }
   ],
   "transactions": [
@@ -148,6 +149,7 @@
       "expense": 110000,
       "category": "패션",
       "date": "2025-04-12"
+
     },
     {
       "id": "21a7",
