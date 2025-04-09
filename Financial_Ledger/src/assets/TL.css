@@ -137,7 +137,6 @@ body {
 }
 .summary-card strong {
   font-weight: 700;
-  color: #333;
 }
 
 /* 월별 내역 컨트롤 */
@@ -191,6 +190,16 @@ body {
   background-color: #fafaf0;
   color: #f2bb13;
   font-weight: bold;
+}
+.profit {
+  font-weight: 700;
+  color: rgb(50, 50, 50);
+}
+.income {
+  color: rgb(50, 50, 255);
+}
+.outcome {
+  color: rgb(255, 50, 50);
 }
 
 /* 거래 내역 테이블 */
