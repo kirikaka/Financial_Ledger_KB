@@ -2,7 +2,8 @@
   <div class="modal-backdrop">
     <div class="modal">
       <h1 class="header-title">
-        <span style="color: #F2BB13;">{{ memberName }}</span>의 거래 내역
+        <span style="color: #f2bb13">{{ memberName }}</span
+        >의 거래 내역
       </h1>
       <h2 class="subtitle">빠른 거래 추가</h2>
 
@@ -53,58 +54,70 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['userId'],
-  data() {
-    return {
-      transactionType: 'income',
-      // 사용자 지정해둠 로그인 구현 완료 후 진행
-      form: {
-        userId: '',
-        date: '',
-        expense: 0,
-        category: '',
-        memo: '',
-      },
-      memberName: '',
-    };
-  },
-  created() {
-    this.form.userId = this.userId;
-    this.fetchMemberName();
-  },
-  methods: {
-    async fetchMemberName() {
-      try {
-        const response = await fetch(`http://localhost:3000/members/${this.form.userId}`);
-        const result = await response.json();
-        this.memberName = result.name;
-      } catch (error) {
-        console.error('이름을 불러오는 중 오류 발생:', error);
-      }
-    },
-    addTransaction() {
-      const newTransaction = {
-        ...this.form,
-        income: this.transactionType === 'income',
-        outcome: this.transactionType === 'outcome',
-      };
+<script setup>
+import { ref, onMounted } from 'vue';
 
-      fetch('http://localhost:3000/transactions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newTransaction),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          this.$emit('added', data); // 부모에게 성공 알림
-          this.$emit('close'); // 모달 닫기
-        })
-        .catch((err) => console.error('추가 실패:', err));
-    },
+// Props 정의
+const props = defineProps({
+  userId: {
+    type: String,
+    required: true,
   },
+});
+
+// 상태 정의
+const transactionType = ref('income');
+const memberName = ref('');
+const form = ref({
+  userId: props.userId,
+  date: '',
+  expense: 0,
+  category: '',
+  memo: '',
+});
+
+// 이벤트 정의
+const emit = defineEmits(['added', 'close']);
+
+// 멤버 이름 가져오기
+const fetchMemberName = async () => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/members/${form.value.userId}`
+    );
+    const result = await response.json();
+    memberName.value = result.name;
+  } catch (error) {
+    console.error('이름을 불러오는 중 오류 발생:', error);
+  }
 };
+
+// 트랜잭션 추가
+const addTransaction = () => {
+  const newTransaction = {
+    ...form.value,
+    income: transactionType.value === 'income',
+    outcome: transactionType.value === 'outcome',
+  };
+
+  fetch('http://localhost:3000/transactions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newTransaction),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      emit('added', data); // 부모에게 성공 알림
+      emit('close'); // 모달 닫기
+    })
+    .catch((err) => console.error('추가 실패:', err));
+};
+
+// 컴포넌트 마운트 시 실행
+onMounted(() => {
+  form.value.userId = props.userId;
+  fetchMemberName();
+});
 </script>
 
 <style scoped>
@@ -112,19 +125,23 @@ export default {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 9999;
+  z-index: ; /* z-index를 충분히 높게 설정 */
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .modal {
+  position: relative; /* 모달 자체의 위치를 설정 */
   background: #fff3c7;
   padding: 2rem;
   border-radius: 8px;
   width: 700px;
   height: 600px;
+  z-index: 10501; /* modal-backdrop보다 더 높은 값 */
 }
-.title, .subtitle {
+.title,
+.subtitle {
   text-align: center;
 }
 .modal label {
