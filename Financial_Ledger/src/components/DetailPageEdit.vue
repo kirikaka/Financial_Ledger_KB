@@ -27,14 +27,19 @@
       <label>
         분류
         <select v-model="edited.category">
-          <optgroup label="수입">
+          <optgroup v-if="transactionType === 'income'" label="수입">
               <option value="월급">월급</option>
+              <option value="부수입">부수입</option>
               <option value="용돈">용돈</option>
+              <option value="금융소득">금융소득</option>
               <option value="기타">기타</option>
             </optgroup>
-            <optgroup label="지출">
+            <optgroup v-if="transactionType === 'outcome'" label="지출">
               <option value="식비">식비</option>
-              <option value="교통비">교통비</option>
+              <option value="교통">교통</option>
+              <option value="문화생활">문화생활</option>
+              <option value="생활비">생활비</option>
+              <option value="패션">패션</option>
               <option value="기타">기타</option>
             </optgroup>
         </select>
@@ -63,7 +68,16 @@ export default {
       edited: { ...this.data },
       transactionType: this.data.income ? 'income' : 'outcome',
       memberName: '',
+      incomeCategories: ['월급', '부수입', '용돈', '금융소득', '기타'],
+      outcomeCategories: ['식비', '교통', '문화생활', '생활비', '패션', '기타'],
     };
+  },
+  computed: {
+    categoryOptions() {
+      return this.transactionType === 'income'
+        ? this.incomeCategories
+        : this.outcomeCategories;
+    },
   },
   created() {
     this.fetchMemberName();
@@ -79,7 +93,6 @@ export default {
       }
     },
     save() {
-      // 수입/지출 상태 동기화
       this.edited.income = this.transactionType === 'income';
       this.edited.outcome = this.transactionType === 'outcome';
       this.$emit('save', this.edited);
