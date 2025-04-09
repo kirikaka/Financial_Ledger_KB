@@ -56,7 +56,6 @@ function redirectToGoogle() {
 
 async function handleLogin() {
   try {
-
     const res = await axios.get('http://localhost:3000/members');
     const members = res.data;
 
@@ -75,8 +74,9 @@ async function handleLogin() {
     alert('로그인 성공!');
 
     localStorage.setItem('userId', user.id);
+    localStorage.setItem('auth', 'true');
 
-    router.push('/home');
+    router.push('/');
   } catch (error) {
     console.error('로그인 오류:', error);
     alert('서버 오류가 발생했습니다.');

@@ -110,13 +110,15 @@ const formatNumber = (num) => {
 };
 
 const logout = () => {
+  localStorage.removeItem('auth');
+  localStorage.removeItem('userId');
   emit('logout');
   router.push('/login'); // '/' 경로로 이동
 };
 
 // ✅ MainPage로 이동하는 함수
 const goToMainPage = () => {
-  router.push('/homepage'); // '/' 경로로 이동
+  router.push('/'); // '/' 경로로 이동
   window.scrollTo({ top: 0, behavior: 'smooth' }); // 페이지 상단으로 스크롤 (부드럽게)
 };
 
