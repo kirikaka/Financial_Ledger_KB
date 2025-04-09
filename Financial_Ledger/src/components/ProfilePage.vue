@@ -1,3 +1,5 @@
+ProfilePage.vue
+
 <template>
   <Sidebar
     v-if="user.name"
@@ -9,7 +11,7 @@
     <!-- 사용자 이름과 Edit 버튼 -->
     <div class="profile-header">
       <h1 class="username">{{ user.name }}</h1>
-      <button class="edit-btn">Edit</button>
+      <button class="edit-btn" @click="isEditModalOpen = true">Edit</button>
     </div>
 
     <!-- 성과 이름 -->
@@ -42,11 +44,19 @@
         disabled
       />
     </div>
+    <ProfileEditModal
+      v-if="isEditModalOpen"
+      :data="user"
+      @close="isEditModalOpen = false"
+      @save="handleSave"
+    />
+
   </div>
 </template>
 
 <script setup>
 import Sidebar from '@/components/Sidebar.vue';
+import ProfileEditModal from '@/components/ProfileEditModal.vue'; // 경로는 파일 위치에 따라 조정
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 
@@ -60,8 +70,12 @@ const user = ref({
   password: '',
 });
 
-// 현재 로그인된 사용자 ID
-const userId = '1234'; // 예제 ID
+// ✅ 모달 열림 여부
+const isEditModalOpen = ref(false);
+
+// ✅ 현재 로그인된 사용자 ID
+const userId = '1234';
+
 
 // 사용자 데이터 가져오기
 const fetchUserData = async () => {
@@ -81,6 +95,17 @@ const fetchUserData = async () => {
     };
   } catch (error) {
     console.error('사용자 데이터를 가져오는 중 오류 발생:', error);
+  }
+};
+
+// ✅ 저장 이벤트 처리 함수
+const handleSave = async (editedData) => {
+  try {
+    await axios.put(`http://localhost:3000/members/${userId}`, editedData);
+    user.value = { ...editedData }; // 화면에 바로 반영
+    isEditModalOpen.value = false; // 모달 닫기
+  } catch (error) {
+    console.error('사용자 정보 저장 실패:', error);
   }
 };
 
