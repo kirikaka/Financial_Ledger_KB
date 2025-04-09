@@ -10,7 +10,9 @@
       최근 거래 내역 확인
     </button>
 
-    <button class="menu-btn">빠른 거래 추가</button>
+    <button class="menu-btn" @click="showAddModal = true">
+      빠른 거래 추가
+    </button>
 
     <div class="financial-info">
       <div class="info-row">
@@ -35,6 +37,14 @@
     </button>
 
     <button class="logout-btn" @click="logout">Logout</button>
+    <!-- 거래 추가 모달 -->
+
+    <TransactionsAddModal
+      v-if="showAddModal"
+      :user-id="props.userId"
+      @close="showAddModal = false"
+      @added="fetchTransactions"
+    />
   </div>
 </template>
 
@@ -42,6 +52,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router'; // Vue Router 사용
 import axios from 'axios';
+import TransactionsAddModal from './TransactionsAdd.vue';
 
 // Props
 const props = defineProps({
@@ -63,6 +74,7 @@ const router = useRouter(); // 라우터 인스턴스 생성
 
 // State
 const transactions = ref([]);
+const showAddModal = ref(false); // 거래 추가 모달 상태
 
 // Computed properties for financial summaries
 const totalIncome = computed(() => {
