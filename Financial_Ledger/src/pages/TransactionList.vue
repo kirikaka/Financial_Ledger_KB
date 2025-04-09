@@ -139,6 +139,7 @@ const currentUser = ref({}); // 현재 사용자 정보
 const transactions = ref([]); // 거래 내역
 const activeTab = ref('전체'); // 현재 활성 탭 (전체, 수입, 지출)
 const currentDate = ref(new Date(2025, 3, 1)); // 현재 날짜
+const itemsToShow = ref(5); // 처음에는 5개만 표시
 
 // 모달 상태 관리
 const showAddModal = ref(false); // 거래 추가 모달 상태
@@ -252,7 +253,7 @@ const filteredTransactions = computed(() => {
     trans = trans.filter((txn) => txn.type === activeTab.value);
   }
 
-  return trans;
+  return trans.slice(0, itemsToShow.value);
 });
 
 // 월 이동 처리 함수들
@@ -273,6 +274,11 @@ const formatCurrency = (amount) => Number(amount).toLocaleString();
 const openModal = (transaction) => {
   selectedItem.value = { ...transaction };
   isModalVisible.value = true;
+};
+
+// 더 불러오기
+const loadMore = () => {
+  itemsToShow.value += 5; // 5개씩 추가
 };
 
 const saveTransaction = async (updatedItem) => {
