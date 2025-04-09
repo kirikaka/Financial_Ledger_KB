@@ -39,12 +39,14 @@
     <button class="logout-btn" @click="logout">Logout</button>
     <!-- 거래 추가 모달 -->
 
-    <TransactionsAddModal
-      v-if="showAddModal"
-      :user-id="props.userId"
-      @close="showAddModal = false"
-      @added="fetchTransactions"
-    />
+    <teleport to="body" v-if="showAddModal">
+      <TransactionsAddModal
+        v-if="showAddModal"
+        :user-id="props.userId"
+        @close="showAddModal = false"
+        @added="fetchTransactions"
+      />
+    </teleport>
   </div>
 </template>
 
@@ -150,7 +152,7 @@ onMounted(() => {
   height: 100vh; /* 전체 높이 */
   width: 280px; /* 사이드바 너비 */
   background-color: #1a1a1a;
-  color: white;
+  /* color: white; */
   display: flex;
   flex-direction: column;
   padding: 20px;
