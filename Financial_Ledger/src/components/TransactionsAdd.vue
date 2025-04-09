@@ -28,12 +28,12 @@
       <label>
         분류
         <select v-model="form.category">
-          <optgroup label="수입">
+          <optgroup v-if="transactionType === 'income'" label="수입">
             <option value="월급">월급</option>
             <option value="용돈">용돈</option>
             <option value="기타">기타</option>
           </optgroup>
-          <optgroup label="지출">
+          <optgroup v-if="transactionType === 'outcome'" label="지출">
             <option value="식비">식비</option>
             <option value="교통비">교통비</option>
             <option value="기타">기타</option>
@@ -125,20 +125,20 @@ onMounted(() => {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
-  z-index: ; /* z-index를 충분히 높게 설정 */
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 50; /* 값 50  */
 }
 
 .modal {
-  position: relative; /* 모달 자체의 위치를 설정 */
-  background: #fff3c7;
   padding: 2rem;
   border-radius: 8px;
   width: 700px;
   height: 600px;
-  z-index: 10501; /* modal-backdrop보다 더 높은 값 */
+  position: relative;
+  background: #fff3c7;
+  z-index: 500; /* 값 500  */
 }
 .title,
 .subtitle {
