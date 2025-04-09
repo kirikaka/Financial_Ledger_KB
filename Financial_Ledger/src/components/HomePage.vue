@@ -6,6 +6,7 @@
       :userId="user.id"
       :userName="user.name"
       @logout="handleLogout"
+      @added="handleTransactionAdded"
     />
 
     <!-- 메인 콘텐츠 -->
@@ -66,6 +67,10 @@ const fetchData = async () => {
   } catch (e) {
     console.error('데이터 불러오기 실패:', e);
   }
+};
+
+const handleTransactionAdded = (newTx) => {
+  allTransactions.value = [...allTransactions.value, newTx];
 };
 
 // 쿠키에서 토큰 추출
