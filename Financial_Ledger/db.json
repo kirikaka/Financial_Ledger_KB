@@ -11,7 +11,11 @@
       "email": "woori@naver.com",
       "password": "5678",
       "name": "우리은행"
-
+    },
+    {
+      "id": "d45e",
+      "email": "rbwls1542@gmail.com",
+      "name": "전규진"
     }
   ],
   "transactions": [
@@ -149,17 +153,66 @@
       "expense": 110000,
       "category": "패션",
       "date": "2025-04-12"
-
     },
     {
-      "id": "21a7",
-      "userId": "1234",
-      "date": "2025-04-16",
-      "expense": 150000,
-      "category": "기타",
-      "memo": "기타를 샀음",
+      "id": "7824",
+      "userId": "d45e",
+      "date": "2024-04-07",
+      "expense": 100000,
+      "category": "용돈",
+      "memo": "개꿀",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "b671",
+      "userId": "d45e",
+      "date": "",
+      "expense": 0,
+      "category": "",
+      "memo": "",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "7952",
+      "userId": "d45e",
+      "date": "2024-04-07",
+      "expense": 100000,
+      "category": "월급",
+      "memo": "ㄱㄱ",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "008c",
+      "userId": "d45e",
+      "date": "2025-04-25",
+      "expense": 100000,
+      "category": "월급",
+      "memo": "",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "2e8d",
+      "userId": "d45e",
+      "date": "2025-04-25",
+      "expense": 100000,
+      "category": "식비",
+      "memo": "dfd",
       "income": false,
       "outcome": true
+    },
+    {
+      "id": "c0b9",
+      "userId": "d45e",
+      "date": "2025-04-11",
+      "expense": 100000,
+      "category": "용돈",
+      "memo": "rr",
+      "income": true,
+      "outcome": false
     }
   ]
 }
