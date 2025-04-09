@@ -41,6 +41,7 @@ import Sidebar from '@/components/Sidebar.vue';
 import GraphBar from '@/components/GraphBar.vue';
 import GraphPie from '@/components/GraphPie.vue';
 import Calendar from '@/components/Calendar.vue';
+import { jwtDecode } from 'jwt-decode';
 
 // ✅ 사용자 ID를 localStorage에서 가져오기
 const userId = localStorage.getItem('userId');
@@ -67,14 +68,68 @@ const fetchData = async () => {
   }
 };
 
+// 쿠키에서 토큰 추출
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
+
+// 사용자 정보 디코딩 및 json-server 등록
+async function handleSocialLogin() {
+  const token = getCookie('token');
+  if (!token) {
+    console.warn('❌ 쿠키에서 토큰을 찾을 수 없습니다.');
+    return;
+  }
+
+  try {
+    const decoded = jwtDecode(token);
+    const email = decoded.sub; // subject
+    const name = decoded.role; // name을 role 자리에 넣은 상태
+
+    console.log('✅ 디코딩된 사용자:', email, name);
+
+    const memberRes = await axios.get('http://localhost:3000/members');
+    const alreadyExists = memberRes.data.some((m) => m.email === email);
+
+    if (!alreadyExists) {
+      await axios.post('http://localhost:3000/members', { email, name });
+      console.log('🌟 json-server에 사용자 등록 완료');
+    }
+
+    const updatedMembers = await axios.get('http://localhost:3000/members');
+    const currentUser = updatedMembers.data.find((m) => m.email === email);
+
+    if (currentUser) {
+      localStorage.setItem('userId', currentUser.id);
+      console.log('✅ 사용자 ID 저장 완료:', currentUser.id);
+
+      // ✅ userId가 정상적으로 저장되었고, 아직 새로고침하지 않았다면
+      if (!localStorage.getItem('hasReloaded')) {
+        localStorage.setItem('hasReloaded', 'true');
+        setTimeout(() => {
+          window.location.reload();
+        }, 200); // 약간의 딜레이 후 새로고침
+      }
+    } else {
+      console.warn('❗ 사용자 정보 찾기 실패');
+    }
+
+    // 이후 라우터 이동 등 필요 시 여기에 추가
+  } catch (err) {
+    console.error('❌ JWT 디코딩 또는 저장 실패:', err);
+  }
+}
+
 // ✅ 로그아웃 핸들러
 const handleLogout = () => {
   console.log('로그아웃되었습니다.');
 };
 
 // ✅ 마운트 시 API 호출
-onMounted(() => {
-  fetchData();
+onMounted(async () => {
+  fetchData(); // 일반 함수
+  await handleSocialLogin(); // async 함수 실행
 });
 
 // ✅ 이번 달 거래만 필터링

@@ -20,6 +20,16 @@
       <button type="submit" class="login-button">로그인</button>
     </form>
 
+    <div class="google-login">
+      <div class="google-button" @click="redirectToGoogle">
+        <img
+          src="@/assets/google_login.png"
+          alt="Google Logo"
+          class="google-icon"
+        />
+      </div>
+    </div>
+
     <p class="signup-link">
       <router-link to="/signup">새 계정 만들기</router-link>
     </p>
@@ -38,6 +48,10 @@ const router = useRouter();
 
 function togglePassword() {
   showPassword.value = !showPassword.value;
+}
+
+function redirectToGoogle() {
+  window.location.href = 'http://localhost:8080/oauth2/authorization/google';
 }
 
 async function handleLogin() {
