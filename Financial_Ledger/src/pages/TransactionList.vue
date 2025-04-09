@@ -11,7 +11,8 @@
     <!-- 메인 콘텐츠 -->
     <div class="main-content">
       <h1 class="header-title">
-        <span style="color: #F2BB13;">{{ currentUser.name }}</span>님의 거래 내역
+        <span style="color: #f2bb13">{{ currentUser.name }}</span
+        >님의 거래 내역
       </h1>
 
       <div class="summary-cards">
@@ -74,7 +75,10 @@
         <tbody>
           <tr v-for="transaction in filteredTransactions" :key="transaction.id">
             <td
-              :class="{ income: transaction.type === '수입', outcome: transaction.type === '지출' }"
+              :class="{
+                income: transaction.type === '수입',
+                outcome: transaction.type === '지출',
+              }"
             >
               {{ transaction.type }}
             </td>
@@ -106,7 +110,7 @@
         @close="isModalVisible = false"
         @save="saveTransaction"
       />
-      
+
       <!-- 거래 추가 모달 -->
       <TransactionsAdd
         v-if="showAddModal"
@@ -117,7 +121,6 @@
 
       <!-- 더 보기 버튼 -->
       <button class="load-more-btn" @click="loadMore">Load More</button>
-
     </div>
   </div>
 </template>
@@ -127,7 +130,7 @@
 import Sidebar from '@/components/Sidebar.vue';
 import DetailPageEdit from '@/components/DetailPageEdit.vue';
 import TransactionsAdd from '@/components/TransactionsAdd.vue';
-
+import '@/assets/TL.css';
 import { ref, computed, onMounted } from 'vue';
 
 // 사용자 ID 및 상태 관리
@@ -189,6 +192,49 @@ const userTransactions = computed(() =>
     type: txn.income ? '수입' : '지출',
   }))
 );
+const incomeTotalFormatted = computed(() =>
+  transactions.value
+    .filter((txn) => txn.income)
+    .reduce((acc, txn) => acc + txn.expense, 0)
+    .toLocaleString()
+);
+
+const expenseTotalFormatted = computed(() =>
+  transactions.value
+    .filter((txn) => txn.outcome)
+    .reduce((acc, txn) => acc + txn.expense, 0)
+    .toLocaleString()
+);
+
+const netProfitFormatted = computed(() =>
+  (
+    transactions.value
+      .filter((txn) => txn.income)
+      .reduce((acc, txn) => acc + txn.expense, 0) -
+    transactions.value
+      .filter((txn) => txn.outcome)
+      .reduce((acc, txn) => acc + txn.expense, 0)
+  ).toLocaleString()
+);
+
+const monthDisplay = computed(() => {
+  const monthNames = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC',
+  ];
+  const d = currentDate.value;
+  return `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+});
 
 const filteredTransactions = computed(() => {
   const currentYear = currentDate.value.getFullYear();
@@ -234,7 +280,7 @@ const saveTransaction = async (updatedItem) => {
   if (index !== -1) {
     transactions.value.splice(index, 1, updatedItem);
   }
-  
+
   isModalVisible.value = false;
 
   // 실제 db.json에 반영하려면 PATCH 요청 필요
