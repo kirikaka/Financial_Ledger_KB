@@ -53,6 +53,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router'; // Vue Router 사용
 import axios from 'axios';
 import TransactionsAddModal from './TransactionsAdd.vue';
+import TransactionsAdd from './TransactionsAdd.vue';
 
 // Props
 const props = defineProps({
@@ -67,7 +68,7 @@ const props = defineProps({
 });
 
 // Emits
-const emit = defineEmits(['logout']);
+const emit = defineEmits(['logout', 'added']);
 
 // Vue Router
 const router = useRouter(); // 라우터 인스턴스 생성
@@ -100,6 +101,9 @@ const fetchTransactions = async () => {
       `http://localhost:3000/transactions?userId=${props.userId}`
     );
     transactions.value = response.data;
+
+    const latestTx = transactions.value[transactions.value.length - 1];
+    emit('added', latestTx);
   } catch (error) {
     console.error('Error fetching transactions:', error);
   }

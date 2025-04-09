@@ -125,7 +125,7 @@ onMounted(() => {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
-  z-index: ; /* z-index를 충분히 높게 설정 */
+  z-index: 1; /* z-index를 충분히 높게 설정 */
   display: flex;
   justify-content: center;
   align-items: center;
