@@ -9,8 +9,7 @@
     />
 
     <!-- 메인 콘텐츠 -->
-    <main class="main-content">
-      <!-- 헤더 -->
+    <main class="main-content" v-if="user.name">
       <header class="header">
         <h1>
           <span class="username">{{ user.name }}</span
@@ -19,9 +18,8 @@
         <h2>지출 / 수입</h2>
       </header>
 
-      <!-- 그래프 섹션 -->
+      <!-- 그래프 -->
       <section class="graphs">
-        <!-- GraphBar와 GraphPie를 같은 줄에 배치 -->
         <div class="graph-row">
           <GraphBar :transactions="filteredTransactions" />
           <GraphPie :transactions="filteredTransactions" />
@@ -42,31 +40,19 @@ import GraphBar from '@/components/GraphBar.vue';
 import GraphPie from '@/components/GraphPie.vue';
 import Calendar from '@/components/Calendar.vue';
 import { jwtDecode } from 'jwt-decode';
+import { useRouter } from 'vue-router';
 
-// ✅ 사용자 ID를 localStorage에서 가져오기
-const userId = localStorage.getItem('userId');
-const user = ref({ id: userId, name: '' });
+const router = useRouter(); // 리디렉션을 위한 router 사용
+
+// 사용자 및 거래내역 상태
+const user = ref({ id: '', name: '' });
 const allTransactions = ref([]);
 
-// ✅ 현재 날짜를 기준으로 이번 달 구하기 (예: 2025-04)
+// 이번 달 계산
 const now = new Date();
 const currentMonth = `${now.getFullYear()}-${String(
   now.getMonth() + 1
 ).padStart(2, '0')}`;
-
-// ✅ 데이터 가져오기
-const fetchData = async () => {
-  try {
-    const [userRes, transactionsRes] = await Promise.all([
-      axios.get(`http://localhost:3000/members/${userId}`),
-      axios.get(`http://localhost:3000/transactions?userId=${userId}`),
-    ]);
-    user.value.name = userRes.data.name;
-    allTransactions.value = transactionsRes.data;
-  } catch (e) {
-    console.error('데이터 불러오기 실패:', e);
-  }
-};
 
 // 쿠키에서 토큰 추출
 function getCookie(name) {
@@ -74,65 +60,87 @@ function getCookie(name) {
   return match ? match[2] : null;
 }
 
-// 사용자 정보 디코딩 및 json-server 등록
+// 소셜 로그인 및 사용자 등록
 async function handleSocialLogin() {
   const token = getCookie('token');
   if (!token) {
-    console.warn('❌ 쿠키에서 토큰을 찾을 수 없습니다.');
-    return;
+    console.warn('❌ 토큰이 없습니다.');
+    return null;
   }
 
   try {
     const decoded = jwtDecode(token);
-    const email = decoded.sub; // subject
-    const name = decoded.role; // name을 role 자리에 넣은 상태
-
-    console.log('✅ 디코딩된 사용자:', email, name);
+    const email = decoded.sub;
+    const name = decoded.role;
 
     const memberRes = await axios.get('http://localhost:3000/members');
-    const alreadyExists = memberRes.data.some((m) => m.email === email);
+    let currentUser = memberRes.data.find((m) => m.email === email);
 
-    if (!alreadyExists) {
+    if (!currentUser) {
       await axios.post('http://localhost:3000/members', { email, name });
-      console.log('🌟 json-server에 사용자 등록 완료');
+      const updated = await axios.get('http://localhost:3000/members');
+      currentUser = updated.data.find((m) => m.email === email);
     }
-
-    const updatedMembers = await axios.get('http://localhost:3000/members');
-    const currentUser = updatedMembers.data.find((m) => m.email === email);
 
     if (currentUser) {
       localStorage.setItem('userId', currentUser.id);
-      console.log('✅ 사용자 ID 저장 완료:', currentUser.id);
-
-      // ✅ userId가 정상적으로 저장되었고, 아직 새로고침하지 않았다면
-      if (!localStorage.getItem('hasReloaded')) {
-        localStorage.setItem('hasReloaded', 'true');
-        setTimeout(() => {
-          window.location.reload();
-        }, 200); // 약간의 딜레이 후 새로고침
-      }
-    } else {
-      console.warn('❗ 사용자 정보 찾기 실패');
+      return currentUser;
     }
-
-    // 이후 라우터 이동 등 필요 시 여기에 추가
   } catch (err) {
-    console.error('❌ JWT 디코딩 또는 저장 실패:', err);
+    console.error('❌ 로그인 처리 중 오류 발생:', err);
+  }
+
+  return null;
+}
+
+// 사용자 및 거래내역 불러오기
+async function fetchData(userId) {
+  try {
+    const [userRes, transactionsRes] = await Promise.all([
+      axios.get(`http://localhost:3000/members/${userId}`),
+      axios.get(`http://localhost:3000/transactions?userId=${userId}`),
+    ]);
+    user.value = { id: userRes.data.id, name: userRes.data.name };
+    allTransactions.value = transactionsRes.data;
+  } catch (e) {
+    console.error('❌ 데이터 로딩 실패:', e);
   }
 }
 
-// ✅ 로그아웃 핸들러
+// 로그아웃 핸들러
 const handleLogout = () => {
-  console.log('로그아웃되었습니다.');
+  // 모든 정보 초기화
+  user.value = { id: '', name: '' };
+  allTransactions.value = [];
+  localStorage.removeItem('userId');
+
+  // 쿠키 제거 (토큰 초기화)
+  document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+  // 페이지 리디렉션
+  router.push('/login');
+  console.log('✅ 로그아웃 완료');
 };
 
-// ✅ 마운트 시 API 호출
+// 마운트 시 전체 흐름 제어
 onMounted(async () => {
-  fetchData(); // 일반 함수
-  await handleSocialLogin(); // async 함수 실행
+  let savedUserId = localStorage.getItem('userId');
+
+  if (!savedUserId) {
+    const currentUser = await handleSocialLogin();
+    if (currentUser) {
+      savedUserId = currentUser.id;
+    }
+  }
+
+  if (savedUserId) {
+    await fetchData(savedUserId);
+  } else {
+    console.warn('❗ 사용자 ID가 없어 데이터를 불러올 수 없습니다.');
+  }
 });
 
-// ✅ 이번 달 거래만 필터링
+// 이번 달 거래 필터링
 const filteredTransactions = computed(() =>
   allTransactions.value.filter((t) => t.date.startsWith(currentMonth))
 );
@@ -140,44 +148,38 @@ const filteredTransactions = computed(() =>
 
 <style scoped>
 .homepage {
-  display: flex; /* Sidebar와 main-content를 좌우로 배치 */
+  display: flex;
 }
-
 .sidebar {
-  position: fixed; /* 화면 왼쪽에 고정 */
+  position: fixed;
   top: 0;
   left: 0;
-  height: 100vh; /* 화면 전체 높이 */
-  width: 280px; /* Sidebar 너비 */
+  height: 100vh;
+  width: 280px;
   background-color: #1a1a1a;
 }
-
 .main-content {
-  flex: 1; /* 남은 공간을 차지 */
-  margin-left: 350px; /* Sidebar 너비만큼 여백 추가 */
+  flex: 1;
+  margin-left: 350px;
   padding: 20px;
 }
-
 .header {
   margin-bottom: 20px;
 }
-
 .header h1 {
   font-size: 2.2rem;
 }
-
 .username {
   color: #f4bd24;
 }
-
 .graphs {
   margin-top: 20px;
 }
 .graph-row {
-  display: flex; /* 가로로 배치 */
-  gap: 20px; /* 그래프 간 간격 추가 */
+  display: flex;
+  gap: 20px;
 }
 .graph-container {
-  flex: 1; /* 각 그래프가 동일한 공간을 차지하도록 설정 */
+  flex: 1;
 }
 </style>

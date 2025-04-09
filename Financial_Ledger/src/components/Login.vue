@@ -51,6 +51,7 @@ function togglePassword() {
 }
 
 function redirectToGoogle() {
+  localStorage.setItem('auth', 'true');
   window.location.href = 'http://localhost:8080/oauth2/authorization/google';
 }
 
