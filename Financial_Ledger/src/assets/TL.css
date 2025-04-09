@@ -142,9 +142,17 @@ body {
   display: block;
   margin-bottom: 0.5rem;
 }
-.summary-card strong {
+.profit {
   font-weight: 700;
-  color: #333;
+  color: rgb(50, 50, 50);
+}
+.income {
+  font-weight: 700;
+  color: rgb(50, 50, 255);
+}
+.outcome {
+  font-weight: 700;
+  color: rgb(255, 50, 50);
 }
 
 /* 월별 내역 컨트롤 */

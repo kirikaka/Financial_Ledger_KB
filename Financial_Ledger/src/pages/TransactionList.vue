@@ -24,15 +24,15 @@
       <div class="summary-cards">
         <div class="summary-card">
           <span>수입</span>
-          <strong>{{ incomeTotalFormatted }}</strong>
+          <strong class="income">{{ incomeTotalFormatted }}</strong>
         </div>
         <div class="summary-card">
           <span>지출</span>
-          <strong>{{ expenseTotalFormatted }}</strong>
+          <strong class="outcome">{{ expenseTotalFormatted }}</strong>
         </div>
         <div class="summary-card">
           <span>순이익</span>
-          <strong>{{ netProfitFormatted }}</strong>
+          <strong class="profit">{{ netProfitFormatted }}</strong>
         </div>
       </div>
 
@@ -79,7 +79,14 @@
         </thead>
         <tbody>
           <tr v-for="transaction in filteredTransactions" :key="transaction.id">
-            <td>{{ transaction.type }}</td>
+            <td
+              :class="{
+                income: transaction.type === '수입',
+                outcome: transaction.type === '지출',
+              }"
+            >
+              {{ transaction.type }}
+            </td>
             <td>{{ transaction.date }}</td>
             <td>{{ formatCurrency(transaction.expense) }}</td>
             <td>
@@ -97,7 +104,14 @@
         </tbody>
       </table>
 
-      <button class="load-more-btn" @click="loadMore">Load More</button>
+      <!-- 현재 탭의 전체 거래 건수가 itemsToShow보다 많을 때에만 보임 -->
+      <button
+        class="load-more-btn"
+        v-if="itemsToShow[activeTab] < allFilteredTransactions.length"
+        @click="loadMore"
+      >
+        Load More
+      </button>
     </div>
   </div>
 </template>
@@ -114,6 +128,12 @@ export default {
       transactions: [],
       activeTab: '전체',
       currentDate: new Date(2025, 3, 1),
+      // 각 탭별로 처음 보여줄 건수를 개별적으로 관리합니다.
+      itemsToShow: {
+        전체: 5,
+        수입: 5,
+        지출: 5,
+      },
     };
   },
   mounted() {
@@ -133,6 +153,7 @@ export default {
   },
   computed: {
     userTransactions() {
+      // userTransactions: 로그인 유저에 해당하는 거래 내역(타입 추가 포함)
       return this.transactions
         .filter((txn) => txn.userId === this.currentUserId)
         .map((txn) => {
@@ -146,7 +167,8 @@ export default {
           return txn;
         });
     },
-    filteredTransactions() {
+    allFilteredTransactions() {
+      // 선택한 월 기준으로 거래 내역 필터링
       const currentYear = this.currentDate.getFullYear();
       const currentMonth = this.currentDate.getMonth();
       let trans = this.userTransactions.filter((txn) => {
@@ -156,10 +178,18 @@ export default {
           txnDate.getMonth() === currentMonth
         );
       });
+      // 탭 필터 (전체/수입/지출) 적용 (전체일 경우 조건 없이 전체 반환)
       if (this.activeTab !== '전체') {
         trans = trans.filter((txn) => txn.type === this.activeTab);
       }
       return trans;
+    },
+    filteredTransactions() {
+      // 현재 탭의 itemsToShow 개수만큼 거래 내역을 slice하여 반환
+      return this.allFilteredTransactions.slice(
+        0,
+        this.itemsToShow[this.activeTab]
+      );
     },
     monthDisplay() {
       const monthNames = [
@@ -222,15 +252,19 @@ export default {
         .catch((err) => console.error(err));
     },
     loadMore() {
-      alert('더 많은 거래 내역을 불러옵니다.');
+      // 현재 활성 탭의 itemsToShow를 5 증가시킵니다.
+      this.itemsToShow[this.activeTab] += 5;
     },
     prevMonth() {
       const d = this.currentDate;
       this.currentDate = new Date(d.getFullYear(), d.getMonth() - 1, 1);
+      // 월이 변경되면, 각 탭별로 보여줄 거래 내역 카운트를 초기화하는 것도 고려합니다.
+      this.itemsToShow = { 전체: 5, 수입: 5, 지출: 5 };
     },
     nextMonth() {
       const d = this.currentDate;
       this.currentDate = new Date(d.getFullYear(), d.getMonth() + 1, 1);
+      this.itemsToShow = { 전체: 5, 수입: 5, 지출: 5 };
     },
     formatCurrency(amount) {
       return Number(amount).toLocaleString();
