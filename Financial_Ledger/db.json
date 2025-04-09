@@ -1,356 +1,39 @@
 {
-  "members": [
-    {
-      "id": "1234",
-      "email": "ant@gmail.com",
-      "password": "1234",
-      "name": "안태현"
-    },
-    {
-      "id": "5678",
-      "email": "woori@naver.com",
-      "password": "5678",
-      "name": "강병현"
-    }
-  ],
-  "transactions": [
-    {
-      "id": "1",
-      "userId": "1234",
-      "income": true,
-      "outcome": false,
-      "expense": 100000,
-      "category": "용돈",
-      "date": "2025-04-10",
-      "memo": "개꿀"
-    },
-    {
-      "id": "2",
-      "userId": "1234",
-      "income": true,
-      "outcome": false,
-      "expense": 150000,
-      "category": "부수입",
-      "date": "2025-04-08"
-    },
-    {
-      "id": "3",
-      "userId": "1234",
-      "income": true,
-      "outcome": false,
-      "expense": 100000,
-      "category": "금융소득",
-      "date": "2025-04-12"
-    },
-    {
-      "id": "4",
-      "userId": "1234",
-      "income": false,
-      "outcome": true,
-      "expense": 50000,
-      "category": "식비",
-      "date": "2025-04-02"
-    },
-    {
-      "id": "5",
-      "userId": "1234",
-      "income": false,
-      "outcome": true,
-      "expense": 30000,
-      "category": "교통",
-      "date": "2025-04-03"
-    },
-    {
-      "id": "6",
-      "userId": "1234",
-      "income": false,
-      "outcome": true,
-      "expense": 70000,
-      "category": "문화생활",
-      "date": "2025-04-05"
-    },
-    {
-      "id": "7",
-      "userId": "1234",
-      "income": false,
-      "outcome": true,
-      "expense": 150000,
-      "category": "생활비",
-      "date": "2025-04-09"
-    },
-    {
-      "id": "8",
-      "userId": "1234",
-      "income": false,
-      "outcome": true,
-      "expense": 90000,
-      "category": "패션",
-      "date": "2025-04-10"
-    },
-    {
-      "id": "9",
-      "userId": "1234",
-      "income": false,
-      "outcome": true,
-      "expense": 20000,
-      "category": "기타",
-      "date": "2025-04-11"
-    },
-    {
-      "id": "10",
-      "userId": "5678",
-      "income": true,
-      "outcome": false,
-      "expense": 2800000,
-      "category": "월급",
-      "date": "2025-04-01",
-      "type": "수입",
-      "memo": "태현님이 용돈주셨다!"
-    },
-    {
-      "id": "11",
-      "userId": "5678",
-      "income": true,
-      "outcome": false,
-      "expense": 120000,
-      "category": "부수입",
-      "date": "2025-04-06",
-      "type": "수입"
-    },
-    {
-      "id": "12",
-      "userId": "5678",
-      "income": false,
-      "outcome": true,
-      "expense": 45000,
-      "category": "식비",
-      "date": "2025-04-02",
-      "type": "지출",
-      "memo": ""
-    },
-    {
-      "id": "13",
-      "userId": "5678",
-      "income": true,
-      "outcome": false,
-      "expense": 5000,
-      "category": "식비",
-      "date": "2025-04-05",
-      "type": "지출",
-      "memo": "혼다 라멘"
-    },
-    {
-      "id": "14",
-      "userId": "5678",
-      "income": false,
-      "outcome": true,
-      "expense": 60000,
-      "category": "생활비",
-      "date": "2025-04-08"
-    },
-    {
-      "id": "0130",
-      "userId": "1234",
-      "date": "",
-      "expense": 0,
-      "category": "",
-      "memo": "",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "97d1",
-      "userId": "1234",
-      "date": "",
-      "expense": 1,
-      "category": "용돈",
-      "memo": "",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "f06a",
-      "userId": "1234",
-      "date": "2025-04-09",
-      "expense": 1,
-      "category": "용돈",
-      "memo": "",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "78d3",
-      "userId": "1234",
-      "date": "2025-04-09",
-      "expense": 2,
-      "category": "용돈",
-      "memo": "dydehs",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "0817",
-      "userId": "1234",
-      "date": "",
-      "expense": 0,
-      "category": "",
-      "memo": "",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "b87b",
-      "userId": "1234",
-      "date": "2025-04-09",
-      "expense": 41000,
-      "category": "월급",
-      "memo": "",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "19cd",
-      "userId": "1234",
-      "date": "2025-04-09",
-      "expense": 700,
-      "category": "월급",
-      "memo": "apdh",
-      "income": false,
-      "outcome": true
-    },
-    {
-      "id": "d337",
-      "userId": "1234",
-      "date": "2025-04-09",
-      "expense": 4000,
-      "category": "월급",
-      "memo": "용돈이다",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "2ef3",
-      "userId": "5678",
-      "date": "2025-04-09",
-      "expense": 700,
-      "category": "월급",
-      "memo": "용돈이아다다다ㅏ",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "9b05",
-      "userId": "5678",
-      "date": "2025-04-08",
-      "expense": 500000,
-      "category": "용돈",
-      "memo": "병현쓰가 준 선물",
-      "income": true,
-      "outcome": false,
-      "type": "수입"
-    },
-    {
-      "id": "1ef2",
-      "userId": "5678",
-      "date": "2025-04-08",
-      "expense": 40000,
-      "category": "교통비",
-      "memo": "",
-      "income": false,
-      "outcome": true,
-      "type": "지출"
-    },
-    {
-      "id": "5894",
-      "userId": "5678",
-      "date": "2025-04-09",
-      "expense": 70000,
-      "category": "용돈",
-      "memo": "",
-      "income": true,
-      "outcome": false,
-      "type": "수입"
-    },
-    {
-      "id": "443b",
-      "userId": "5678",
-      "date": "2025-04-08",
-      "expense": 20000,
-      "category": "식비",
-      "memo": "",
-      "income": false,
-      "outcome": true,
-      "type": "지출"
-    },
-    {
-      "id": "b275",
-      "userId": "5678",
-      "date": "2025-04-09",
-      "expense": 50000,
-      "category": "용돈",
-      "memo": "",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "683a",
-      "userId": "5678",
-      "date": "2025-04-09",
-      "expense": 25,
-      "category": "기타",
-      "memo": "",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "bb52",
-      "userId": "5678",
-      "date": "2025-04-09",
-      "expense": 3000,
-      "category": "용돈",
-      "memo": "",
-      "income": true,
-      "outcome": false
-    },
-    {
-      "id": "dea7",
-      "userId": "5678",
-      "date": "2025-04-11",
-      "expense": 7000,
-      "category": "교통비",
-      "memo": "",
-      "income": false,
-      "outcome": true
-    },
-    {
-      "id": "d374",
-      "userId": "5678",
-      "date": "2025-04-08",
-      "expense": 9000000,
-      "category": "교통비",
-      "memo": "",
-      "income": false,
-      "outcome": true
-    },
-    {
-      "id": "b73e",
-      "userId": "5678",
-      "date": "2025-04-10",
-      "expense": 25000000,
-      "category": "식비",
-      "memo": "",
-      "income": false,
-      "outcome": true
-    },
-    {
-      "id": "b656",
-      "userId": "5678",
-      "date": "",
-      "expense": 0,
-      "category": "",
-      "memo": "",
-      "income": true,
-      "outcome": false
-    }
-  ]
+
+    "members": [
+      {
+        "id": "1234",
+        "email": "ant@gmail.com",
+        "password": "1234",
+        "name": "안태현"
+      },
+      {
+        "id": "5678",
+        "email": "woori@naver.com",
+        "password": "5678",
+        "name": "우리은행"
+      }
+    ],
+    "transactions": [
+      { "id": "1", "userId": "1234", "income": true, "outcome": false, "expense": 3000000, "category": "월급", "date": "2025-04-01" },
+      { "id": "2", "userId": "1234", "income": true, "outcome": false, "expense": 150000, "category": "부수입", "date": "2025-04-08" },
+      { "id": "3", "userId": "1234", "income": true, "outcome": false, "expense": 100000, "category": "금융소득", "date": "2025-04-12" },
+      
+
+      { "id": "4", "userId": "1234", "income": false, "outcome": true, "expense": 50000, "category": "식비", "date": "2025-04-02" },
+      { "id": "5", "userId": "1234", "income": false, "outcome": true, "expense": 30000, "category": "교통", "date": "2025-04-03" },
+      { "id": "6", "userId": "1234", "income": false, "outcome": true, "expense": 70000, "category": "문화생활", "date": "2025-04-05" },
+      { "id": "7", "userId": "1234", "income": false, "outcome": true, "expense": 150000, "category": "생활비", "date": "2025-04-09" },
+      { "id": "8", "userId": "1234", "income": false, "outcome": true, "expense": 90000, "category": "패션", "date": "2025-04-10" },
+      { "id": "9", "userId": "1234", "income": false, "outcome": true, "expense": 20000, "category": "기타", "date": "2025-04-11" },
+
+      { "id": "10", "userId": "5678", "income": true, "outcome": false, "expense": 2800000, "category": "월급", "date": "2025-04-01" },
+      { "id": "11", "userId": "5678", "income": true, "outcome": false, "expense": 120000, "category": "부수입", "date": "2025-04-06" },
+  
+
+      { "id": "12", "userId": "5678", "income": false, "outcome": true, "expense": 45000, "category": "식비", "date": "2025-04-02" },
+      { "id": "13", "userId": "5678", "income": false, "outcome": true, "expense": 28000, "category": "교통", "date": "2025-04-05" },
+      { "id": "14", "userId": "5678", "income": false, "outcome": true, "expense": 60000, "category": "생활비", "date": "2025-04-08" },
+      { "id": "15", "userId": "5678", "income": false, "outcome": true, "expense": 110000, "category": "패션", "date": "2025-04-12" }
+    ]
 }
