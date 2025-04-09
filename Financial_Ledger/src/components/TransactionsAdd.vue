@@ -1,7 +1,9 @@
 <template>
   <div class="modal-backdrop">
     <div class="modal">
-      <h1 class="title">{{ memberName }}의 가계부</h1>
+      <h1 class="header-title">
+        <span style="color: #F2BB13;">{{ memberName }}</span>의 거래 내역
+      </h1>
       <h2 class="subtitle">빠른 거래 추가</h2>
 
       <label>
@@ -59,7 +61,7 @@ export default {
       transactionType: 'income',
       // 사용자 지정해둠 로그인 구현 완료 후 진행
       form: {
-        userId: this.userId,
+        userId: '',
         date: '',
         expense: 0,
         category: '',
@@ -69,6 +71,7 @@ export default {
     };
   },
   created() {
+    this.form.userId = this.userId;
     this.fetchMemberName();
   },
   methods: {

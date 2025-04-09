@@ -19,7 +19,9 @@
       </div>
   
       <div class="main-content">
-        <h1 class="header-title">{{ currentUser.name }}의 거래 내역</h1>
+        <h1 class="header-title">
+          <span style="color: #F2BB13;">{{ currentUser.name }}</span>님의 거래 내역
+        </h1>
   
         <div class="summary-cards">
           <div class="summary-card">
@@ -242,6 +244,8 @@
         this.openModal(transaction);
       },
       openModal(transaction) {
+        console.log('모달 열기');
+        this.showAddModal = true;
         this.selectedItem = { ...transaction };
         this.isModalVisible = true;
       },

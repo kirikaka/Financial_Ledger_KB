@@ -1,7 +1,9 @@
 <template>
   <div class="modal-backdrop">
     <div class="modal">
-      <h1 class="title">{{ memberName }}의 가계부</h1>
+      <h1 class="header-title">
+        <span style="color: #F2BB13;">{{ memberName }}</span>의 거래 내역
+      </h1>
       <h2 class="subtitle">거래 내역 상세 페이지</h2>
 
       <label>

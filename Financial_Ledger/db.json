@@ -10,7 +10,7 @@
       "id": "5678",
       "email": "woori@naver.com",
       "password": "5678",
-      "name": "우리은행"
+      "name": "강병현"
     }
   ],
   "transactions": [
@@ -343,14 +343,14 @@
       "outcome": true
     },
     {
-      "id": "69d1",
+      "id": "b656",
       "userId": "5678",
-      "date": "2025-04-09",
-      "expense": 55,
-      "category": "식비",
+      "date": "",
+      "expense": 0,
+      "category": "",
       "memo": "",
-      "income": false,
-      "outcome": true
+      "income": true,
+      "outcome": false
     }
   ]
 }
