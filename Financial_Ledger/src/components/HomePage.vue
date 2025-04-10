@@ -55,20 +55,20 @@ const currentMonth = `${now.getFullYear()}-${String(
   now.getMonth() + 1
 ).padStart(2, '0')}`;
 
-
 // ✅ 데이터 가져오기
-const fetchData = async () => {
+async function fetchData(userId) {
   try {
+    console.log('🚀 ~ fetchData ~ userId:', userId);
     const [userRes, transactionsRes] = await Promise.all([
       axios.get(`http://localhost:3000/members/${userId}`),
       axios.get(`http://localhost:3000/transactions?userId=${userId}`),
     ]);
-    user.value.name = userRes.data.name;
+    user.value = { id: userRes.data.id, name: userRes.data.name };
     allTransactions.value = transactionsRes.data;
   } catch (e) {
-    console.error('데이터 불러오기 실패:', e);
+    console.error('❌ 데이터 로딩 실패:', e);
   }
-};
+}
 
 const handleTransactionAdded = (newTx) => {
   allTransactions.value = [...allTransactions.value, newTx];
@@ -113,20 +113,6 @@ async function handleSocialLogin() {
   return null;
 }
 
-// 사용자 및 거래내역 불러오기
-async function fetchData(userId) {
-  try {
-    const [userRes, transactionsRes] = await Promise.all([
-      axios.get(`http://localhost:3000/members/${userId}`),
-      axios.get(`http://localhost:3000/transactions?userId=${userId}`),
-    ]);
-    user.value = { id: userRes.data.id, name: userRes.data.name };
-    allTransactions.value = transactionsRes.data;
-  } catch (e) {
-    console.error('❌ 데이터 로딩 실패:', e);
-  }
-}
-
 // 로그아웃 핸들러
 const handleLogout = () => {
   // 모든 정보 초기화
@@ -152,8 +138,8 @@ onMounted(async () => {
       savedUserId = currentUser.id;
     }
   }
-
-  if (savedUserId) {
+  if (savedUserId !== null) {
+    console.log('🚀 ~ null ~ savedUserId:', savedUserId);
     await fetchData(savedUserId);
   } else {
     console.warn('❗ 사용자 ID가 없어 데이터를 불러올 수 없습니다.');
