@@ -117,7 +117,6 @@ const formatNumber = (num) => {
 
 const logout = () => {
   localStorage.removeItem('auth');
-  localStorage.removeItem('userId');
   emit('logout');
   router.push('/login'); // '/' 경로로 이동
 };

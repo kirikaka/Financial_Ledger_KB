@@ -59,6 +59,7 @@ import Sidebar from '@/components/Sidebar.vue';
 import ProfileEditModal from '@/components/ProfileEditModal.vue'; // 경로는 파일 위치에 따라 조정
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
+import { useIdStore } from '@/stores/info';
 
 // 사용자 데이터 상태
 const user = ref({
@@ -71,8 +72,19 @@ const user = ref({
 // ✅ 모달 열림 여부
 const isEditModalOpen = ref(false);
 
+const idStore = useIdStore();
+
+// const userId = localStorage.getItem('userId');
+const userIdPin = computed(() => {
+  return idStore.userIdPinia;
+});
+
+console.log('🚀 ~ userId wit pinia:', userIdPin.value);
+
+const userId = userIdPin.value;
+
 // ✅ 현재 로그인된 사용자 ID
-const userId = '1234';
+// const userId = '1234';
 let lastName = ref('');
 let firstName = ref('');
 
