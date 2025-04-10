@@ -141,7 +141,7 @@ const userIdPin = computed(() => {
   return idStore.userIdPinia;
 });
 
-const userId = userIdPin.value;
+const userId = localStorage.getItem('userId');
 
 // 사용자 ID 및 상태 관리
 const currentUserId = ref(userId); // 현재 로그인된 사용자 ID

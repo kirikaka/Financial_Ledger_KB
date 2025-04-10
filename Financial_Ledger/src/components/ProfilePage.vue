@@ -74,15 +74,6 @@ const isEditModalOpen = ref(false);
 
 const idStore = useIdStore();
 
-// const userId = localStorage.getItem('userId');
-const userIdPin = computed(() => {
-  return idStore.userIdPinia;
-});
-
-console.log('🚀 ~ userId wit pinia:', userIdPin.value);
-
-const userId = userIdPin.value;
-
 // ✅ 현재 로그인된 사용자 ID
 // const userId = '1234';
 const userId = localStorage.getItem('userId');
@@ -98,6 +89,8 @@ function togglePassword() {
 // 사용자 데이터 가져오기
 const fetchUserData = async () => {
   try {
+    const userId = localStorage.getItem('userId');
+
     const response = await axios.get(`http://localhost:3000/members/${userId}`);
 
     // 이름을 성과 이름으로 분리 (예: "안 태현")
