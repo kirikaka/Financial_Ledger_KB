@@ -132,9 +132,19 @@ import DetailPageEdit from '@/components/DetailPageEdit.vue';
 import TransactionsAdd from '@/components/TransactionsAdd.vue';
 import '@/assets/TL.css';
 import { ref, computed, onMounted } from 'vue';
+import { useIdStore } from '@/stores/info';
+
+const idStore = useIdStore();
+
+// const userId = localStorage.getItem('userId');
+const userIdPin = computed(() => {
+  return idStore.userIdPinia;
+});
+
+const userId = userIdPin.value;
 
 // 사용자 ID 및 상태 관리
-const currentUserId = ref('1234'); // 현재 로그인된 사용자 ID
+const currentUserId = ref(userId); // 현재 로그인된 사용자 ID
 const currentUser = ref({}); // 현재 사용자 정보
 const transactions = ref([]); // 거래 내역
 const activeTab = ref('전체'); // 현재 활성 탭 (전체, 수입, 지출)

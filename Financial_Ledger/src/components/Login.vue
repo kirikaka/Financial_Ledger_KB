@@ -40,11 +40,15 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useIdStore } from '@/stores/info';
 
 const email = ref('');
 const password = ref('');
 const showPassword = ref(false);
 const router = useRouter();
+const userIdPinia = ref('');
+const idStore = useIdStore();
+const { setUserId } = idStore;
 
 function togglePassword() {
   showPassword.value = !showPassword.value;
@@ -74,6 +78,11 @@ async function handleLogin() {
     alert('로그인 성공!');
 
     localStorage.setItem('userId', user.id);
+    userIdPinia.value = user.id;
+    console.log('🚀 ~ handleLogin ~ user:', user.id);
+
+    setUserId(userIdPinia.value);
+
     localStorage.setItem('auth', 'true');
 
     router.push('/');

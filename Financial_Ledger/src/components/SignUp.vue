@@ -54,7 +54,7 @@ async function handleSignUp() {
   };
 
   try {
-    const res = await axios.post('http://localhost:3001/members', memberData);
+    const res = await axios.post('http://localhost:3000/members', memberData);
     console.log('회원가입 성공!', res.data);
     alert('회원가입 완료!');
     name.value = '';
