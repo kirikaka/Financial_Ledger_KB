@@ -85,6 +85,7 @@ const userId = userIdPin.value;
 
 // ✅ 현재 로그인된 사용자 ID
 // const userId = '1234';
+const userId = localStorage.getItem('userId');
 let lastName = ref('');
 let firstName = ref('');
 

@@ -143,6 +143,8 @@ const handleLogout = () => {
 onMounted(async () => {
   let savedUserId = userId;
   console.log('🚀 ~ onMounted ~ savedUserId:', savedUserId);
+  ``;
+  let savedUserId = localStorage.getItem('userId');
 
   if (!savedUserId) {
     const currentUser = await handleSocialLogin();
