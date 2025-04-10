@@ -16,6 +16,12 @@
       "id": "d45e",
       "email": "rbwls1542@gmail.com",
       "name": "전규진"
+    },
+    {
+      "id": "707f",
+      "name": "이호진",
+      "email": "1234@naver.com",
+      "password": "1234"
     }
   ],
   "transactions": [
@@ -231,6 +237,46 @@
       "expense": 100000,
       "category": "기타",
       "memo": "rrr",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "0e4d",
+      "userId": "707f",
+      "date": "2025-04-11",
+      "expense": 5000000,
+      "category": "월급",
+      "memo": "ㅎㅇㅎㅇ",
+      "income": true,
+      "outcome": false
+    },
+    {
+      "id": "d202",
+      "userId": "707f",
+      "date": "2025-04-16",
+      "expense": 400000,
+      "category": "식비",
+      "memo": "식비",
+      "income": false,
+      "outcome": true
+    },
+    {
+      "id": "30e3",
+      "userId": "707f",
+      "date": "2025-04-25",
+      "expense": 1000000,
+      "category": "문화생활",
+      "memo": "영화",
+      "income": false,
+      "outcome": true
+    },
+    {
+      "id": "6470",
+      "userId": "707f",
+      "date": "2025-04-18",
+      "expense": 20000,
+      "category": "부수입",
+      "memo": "ㅇㅇ",
       "income": true,
       "outcome": false
     }

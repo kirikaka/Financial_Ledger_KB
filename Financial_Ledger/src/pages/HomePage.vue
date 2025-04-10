@@ -83,8 +83,15 @@ async function fetchData(userId) {
   }
 }
 
-const handleTransactionAdded = (newTx) => {
-  allTransactions.value = [...allTransactions.value, newTx];
+// const handleTransactionAdded = (newTx) => {
+//   allTransactions.value = [...allTransactions.value, newTx];
+// };
+
+const handleTransactionAdded = async () => {
+  const userId = localStorage.getItem('userId');
+  if (userId) {
+    await fetchData(userId);
+  }
 };
 
 // 쿠키에서 토큰 추출
