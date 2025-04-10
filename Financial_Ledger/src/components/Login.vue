@@ -1,38 +1,80 @@
 <template>
-  <div class="login-container">
-    <h1 class="logo">금쪽이</h1>
+  <div
+    class="container d-flex justify-content-center align-items-center min-vh-100"
+  >
+    <div class="card p-4 shadow-sm" style="width: 360px">
+      <!-- 로고 -->
+      <h1 class="text-center mb-4 fw-bold" style="color: #f2bb13">금쪽이</h1>
 
-    <form @submit.prevent="handleLogin" class="login-form">
-      <label for="email">이메일</label>
-      <input type="email" id="email" v-model="email" required />
+      <!-- 로그인 폼 -->
+      <form @submit.prevent="handleLogin">
+        <div class="mb-3">
+          <label for="email" class="form-label">이메일</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            v-model="email"
+            required
+          />
+        </div>
 
-      <label for="password">비밀번호</label>
-      <div class="password-input">
-        <input
-          :type="showPassword ? 'text' : 'password'"
-          id="password"
-          v-model="password"
-          required
-        />
-        <span @click="togglePassword" class="eye-icon">👁️</span>
+        <div class="mb-3">
+          <label for="password" class="form-label">비밀번호</label>
+          <div class="input-group">
+            <input
+              :type="showPassword ? 'text' : 'password'"
+              id="password"
+              class="form-control"
+              v-model="password"
+              required
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              @click="togglePassword"
+            >
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <!-- 로그인 버튼 -->
+        <button type="submit" class="btn btn-warning w-100 fw-bold">
+          로그인
+        </button>
+      </form>
+
+      <!-- Google 로그인 버튼 -->
+      <div class="text-center mt-3">
+        <button class="btn btn-warning w-100 fw-bold" @click="redirectToGoogle">
+          <img
+            src="@/assets/google_login.png"
+            alt="Google Login"
+            style="width: 18px; margin-right: 8px"
+          />
+          Google 계정으로 로그인
+        </button>
       </div>
 
-      <button type="submit" class="login-button">로그인</button>
-    </form>
+      <!-- 새 계정 만들기
+      <div class="text-center mt-3">
+        <router-link to="/signup" class="btn btn-warning w-100 fw-bold">
+          새 계정 만들기
+        </router-link>
+      </div> -->
 
-    <div class="google-login">
-      <div class="google-button" @click="redirectToGoogle">
-        <img
-          src="@/assets/google_login.png"
-          alt="Google Logo"
-          class="google-icon"
-        />
-      </div>
+      <!-- 로그인 안내 문구 -->
+      <p class="text-center mt-3 text-muted">
+        아직 계정이 없으신가요?
+        <router-link
+          to="/signup"
+          class="text-warning fw-bold text-decoration-none"
+        >
+          새 계정 만들기
+        </router-link>
+      </p>
     </div>
-
-    <p class="signup-link">
-      <router-link to="/signup">새 계정 만들기</router-link>
-    </p>
   </div>
 </template>
 
