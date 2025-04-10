@@ -89,7 +89,6 @@
               <button class="action-btn" @click="openModal(transaction)">
                 상세
               </button>
-
               <!-- 삭제 버튼 -->
               <button
                 class="action-btn"
@@ -119,14 +118,15 @@
         @added="fetchTransactions"
       />
 
-      <!-- 더 보기 버튼 -->
-      <button class="load-more-btn" @click="loadMore">Load More</button>
+      <!-- 더 불러오기 버튼 (불러올 내역이 있을 때만 표시) -->
+      <button v-if="hasMore" class="load-more-btn" @click="loadMore">
+        Load More
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-// Sidebar 컴포넌트 import
 import Sidebar from '@/components/Sidebar.vue';
 import DetailPageEdit from '@/components/DetailPageEdit.vue';
 import TransactionsAdd from '@/components/TransactionsAdd.vue';
@@ -139,7 +139,12 @@ const currentUser = ref({}); // 현재 사용자 정보
 const transactions = ref([]); // 거래 내역
 const activeTab = ref('전체'); // 현재 활성 탭 (전체, 수입, 지출)
 const currentDate = ref(new Date(2025, 3, 1)); // 현재 날짜
-const itemsToShow = ref(5); // 처음에는 5개만 표시
+// 각 탭별로 불러올 항목의 개수 관리 (기본 5개씩)
+const itemsToShowCounts = ref({
+  전체: 5,
+  수입: 5,
+  지출: 5,
+});
 
 // 모달 상태 관리
 const showAddModal = ref(false); // 거래 추가 모달 상태
@@ -186,13 +191,14 @@ const handleLogout = () => {
   console.log('로그아웃되었습니다.');
 };
 
-// 거래 내역 필터링 및 계산
+// 거래 내역 필터링, 정렬 및 계산
 const userTransactions = computed(() =>
   transactions.value.map((txn) => ({
     ...txn,
     type: txn.income ? '수입' : '지출',
   }))
 );
+
 const incomeTotalFormatted = computed(() =>
   transactions.value
     .filter((txn) => txn.income)
@@ -237,6 +243,7 @@ const monthDisplay = computed(() => {
   return `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
 });
 
+// 필터 및 정렬 후 탭별로 일정 개수만큼 출력
 const filteredTransactions = computed(() => {
   const currentYear = currentDate.value.getFullYear();
   const currentMonth = currentDate.value.getMonth();
@@ -253,10 +260,37 @@ const filteredTransactions = computed(() => {
     trans = trans.filter((txn) => txn.type === activeTab.value);
   }
 
-  return trans.slice(0, itemsToShow.value);
+  // 날짜 내림차순으로 정렬 (최신 거래가 위쪽)
+  // 같은 날짜라면 '수입'을 우선으로 하여 그룹화
+  trans.sort((a, b) => {
+    const dateDiff = new Date(b.date) - new Date(a.date);
+    if (dateDiff !== 0) return dateDiff;
+    // 같은 날짜일 경우: '수입' 우선 정렬 (원하는 순서로 조정 가능)
+    if (a.type === b.type) return 0;
+    return a.type === '수입' ? -1 : 1;
+  });
+
+  return trans.slice(0, itemsToShowCounts.value[activeTab.value]);
 });
 
-// 월 이동 처리 함수들
+// 현재 탭에서 불러올 거래 내역이 더 있는지 확인
+const hasMore = computed(() => {
+  const currentYear = currentDate.value.getFullYear();
+  const currentMonth = currentDate.value.getMonth();
+  let trans = userTransactions.value.filter((txn) => {
+    const txnDate = new Date(txn.date);
+    return (
+      txnDate.getFullYear() === currentYear &&
+      txnDate.getMonth() === currentMonth
+    );
+  });
+  if (activeTab.value !== '전체') {
+    trans = trans.filter((txn) => txn.type === activeTab.value);
+  }
+  return trans.length > itemsToShowCounts.value[activeTab.value];
+});
+
+// 월 이동 처리
 const prevMonth = () => {
   const d = currentDate.value;
   currentDate.value = new Date(d.getFullYear(), d.getMonth() - 1, 1);
@@ -276,27 +310,41 @@ const openModal = (transaction) => {
   isModalVisible.value = true;
 };
 
-// 더 불러오기
-const loadMore = () => {
-  itemsToShow.value += 5; // 5개씩 추가
-};
-
 const saveTransaction = async (updatedItem) => {
   const index = transactions.value.findIndex((t) => t.id === updatedItem.id);
   if (index !== -1) {
     transactions.value.splice(index, 1, updatedItem);
   }
-
   isModalVisible.value = false;
-
-  // 실제 db.json에 반영하려면 PATCH 요청 필요
   await fetch(`http://localhost:3000/transactions/${updatedItem.id}`, {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updatedItem),
   });
+};
+
+// 삭제 버튼 기능 구현
+const deleteTransaction = async (transaction) => {
+  try {
+    if (!confirm('정말 이 거래를 삭제하시겠습니까?')) return;
+    const response = await fetch(
+      `http://localhost:3000/transactions/${transaction.id}`,
+      { method: 'DELETE' }
+    );
+    if (!response.ok) throw new Error('거래 삭제에 실패했습니다.');
+    transactions.value = transactions.value.filter(
+      (t) => t.id !== transaction.id
+    );
+    alert('거래가 성공적으로 삭제되었습니다.');
+  } catch (error) {
+    console.error('거래 삭제 실패:', error);
+    alert('거래 삭제 중 오류가 발생했습니다.');
+  }
+};
+
+// 더 불러오기 (현재 탭에 해당하는 count만 증가)
+const loadMore = () => {
+  itemsToShowCounts.value[activeTab.value] += 5;
 };
 </script>
 
@@ -306,5 +354,6 @@ const saveTransaction = async (updatedItem) => {
 .main-content {
 }
 .load-more-btn {
+  /* 필요에 따라 스타일 수정 가능 */
 }
 </style>
