@@ -14,59 +14,27 @@ ProfilePage.vue
         <span class="greeting-text"> 님 안녕하세요</span>
       </div>
     </div>
-
     <!-- 사용자 정보 컨테이너 -->
     <div class="user-info-container">
       <div class="info-row">
         <label>성</label>
         <div class="read-only">{{ lastName }}</div>
       </div>
-
       <div class="info-row">
         <label>이름</label>
         <div class="read-only">{{ firstName }}</div>
-    <!-- 사용자 이름과 Edit 버튼 -->
-    <div class="profile-header">
-      <h1 class="username">{{ user.name }}</h1>
-      <button class="edit-btn" @click="isEditModalOpen = true">Edit</button>
-    </div>
-
-    <!-- 성과 이름 -->
-    <div class="name-section">
-      <div class="input-group">
-        <label for="last-name">성</label>
-        <input id="last-name" type="text" v-model="lastName" />
       </div>
-      <div class="input-group">
-        <label for="first-name">이름</label>
-        <input id="first-name" type="text" v-model="firstName" />
-      </div>
-
       <div class="info-row">
         <label>이메일</label>
         <div class="email-display">{{ user.email }}</div>
       </div>
-
       <div class="info-row">
         <label>비밀번호</label>
         <div class="read-only">{{ user.password }}</div>
       </div>
-
       <button class="edit-btn" @click="isEditModalOpen = true">Edit</button>
     </div>
-
     <!-- 프로필 수정 모달 -->
-    <!-- 비밀번호 -->
-    <div class="password-section">
-      <label>비밀번호</label>
-      <input
-        class="pw-input"
-        :type="showPassword ? 'text' : 'password'"
-        v-model="user.password"
-        disabled
-      />
-      <span @click="togglePassword" class="eye-icon">👁️</span>
-    </div>
     <ProfileEditModal
       v-if="isEditModalOpen"
       :data="user"
@@ -78,8 +46,6 @@ ProfilePage.vue
 
 <script setup>
 import Sidebar from '@/components/Sidebar.vue';
-import ProfileEditModal from '@/components/ProfileEditModal.vue';
-import { ref, onMounted } from 'vue';
 import ProfileEditModal from '@/components/ProfileEditModal.vue'; // 경로는 파일 위치에 따라 조정
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
@@ -92,12 +58,8 @@ const user = ref({
   password: '',
 });
 const isEditModalOpen = ref(false);
-const userId = '1234';
-let lastName = ref('');
-let firstName = ref('');
 
 // ✅ 모달 열림 여부
-const isEditModalOpen = ref(false);
 
 const idStore = useIdStore();
 
@@ -140,8 +102,6 @@ const fetchUserData = async () => {
   }
 };
 
-const handleSave = async (editedData) => {
-  try {
 // ✅ 저장 이벤트 처리 함수
 const handleSave = async (editedData) => {
   try {
@@ -151,13 +111,6 @@ const handleSave = async (editedData) => {
       ...user.value,
       name: updatedName,
     };
-    await axios.put(`http://localhost:3000/members/${userId}`, editedData);
-    user.value = { ...editedData };
-    const last = editedData.name.split('')[0];
-    const first = editedData.name.split('').slice(1).join('');
-    lastName.value = last;
-    firstName.value = first;
-    isEditModalOpen.value = false;
 
     await axios.put(`http://localhost:3000/members/${userId}`, editedData);
     user.value = { ...editedData }; // 화면에 바로 반영
@@ -269,17 +222,5 @@ onMounted(() => {
 }
 .edit-btn:hover {
   background-color: #e6a400;
-
-/* 비밀번호 섹션 */
-.password-section {
-  margin-top: 1.5rem;
-  font-size: 20px;
-}
-.password-section input {
-  margin-left: 20px;
-  margin-right: 10px;
-  padding: 0.5rem;
-  border-radius: 8px;
-  border: solid #ddd;
 }
 </style>
