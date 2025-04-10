@@ -39,12 +39,14 @@
     <button class="logout-btn" @click="logout">Logout</button>
     <!-- 거래 추가 모달 -->
 
-    <TransactionsAddModal
-      v-if="showAddModal"
-      :user-id="props.userId"
-      @close="showAddModal = false"
-      @added="fetchTransactions"
-    />
+    <teleport to="body" v-if="showAddModal">
+      <TransactionsAddModal
+        v-if="showAddModal"
+        :user-id="props.userId"
+        @close="showAddModal = false"
+        @added="fetchTransactions"
+      />
+    </teleport>
   </div>
 </template>
 
@@ -53,6 +55,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router'; // Vue Router 사용
 import axios from 'axios';
 import TransactionsAddModal from './TransactionsAdd.vue';
+import TransactionsAdd from './TransactionsAdd.vue';
 
 // Props
 const props = defineProps({
@@ -67,7 +70,7 @@ const props = defineProps({
 });
 
 // Emits
-const emit = defineEmits(['logout']);
+const emit = defineEmits(['logout', 'added']);
 
 // Vue Router
 const router = useRouter(); // 라우터 인스턴스 생성
@@ -100,6 +103,9 @@ const fetchTransactions = async () => {
       `http://localhost:3000/transactions?userId=${props.userId}`
     );
     transactions.value = response.data;
+
+    const latestTx = transactions.value[transactions.value.length - 1];
+    emit('added', latestTx);
   } catch (error) {
     console.error('Error fetching transactions:', error);
   }
@@ -110,13 +116,14 @@ const formatNumber = (num) => {
 };
 
 const logout = () => {
+  localStorage.removeItem('auth');
   emit('logout');
   router.push('/login'); // '/' 경로로 이동
 };
 
 // ✅ MainPage로 이동하는 함수
 const goToMainPage = () => {
-  router.push('/homepage'); // '/' 경로로 이동
+  router.push('/'); // '/' 경로로 이동
   window.scrollTo({ top: 0, behavior: 'smooth' }); // 페이지 상단으로 스크롤 (부드럽게)
 };
 
@@ -144,7 +151,7 @@ onMounted(() => {
   height: 100vh; /* 전체 높이 */
   width: 280px; /* 사이드바 너비 */
   background-color: #1a1a1a;
-  color: white;
+  /* color: white; */
   display: flex;
   flex-direction: column;
   padding: 20px;

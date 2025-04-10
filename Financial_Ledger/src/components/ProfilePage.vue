@@ -1,3 +1,5 @@
+ProfilePage.vue
+
 <template>
   <Sidebar
     v-if="user.name"
@@ -23,6 +25,21 @@
       <div class="info-row">
         <label>이름</label>
         <div class="read-only">{{ firstName }}</div>
+    <!-- 사용자 이름과 Edit 버튼 -->
+    <div class="profile-header">
+      <h1 class="username">{{ user.name }}</h1>
+      <button class="edit-btn" @click="isEditModalOpen = true">Edit</button>
+    </div>
+
+    <!-- 성과 이름 -->
+    <div class="name-section">
+      <div class="input-group">
+        <label for="last-name">성</label>
+        <input id="last-name" type="text" v-model="lastName" />
+      </div>
+      <div class="input-group">
+        <label for="first-name">이름</label>
+        <input id="first-name" type="text" v-model="firstName" />
       </div>
 
       <div class="info-row">
@@ -39,6 +56,17 @@
     </div>
 
     <!-- 프로필 수정 모달 -->
+    <!-- 비밀번호 -->
+    <div class="password-section">
+      <label>비밀번호</label>
+      <input
+        class="pw-input"
+        :type="showPassword ? 'text' : 'password'"
+        v-model="user.password"
+        disabled
+      />
+      <span @click="togglePassword" class="eye-icon">👁️</span>
+    </div>
     <ProfileEditModal
       v-if="isEditModalOpen"
       :data="user"
@@ -52,7 +80,10 @@
 import Sidebar from '@/components/Sidebar.vue';
 import ProfileEditModal from '@/components/ProfileEditModal.vue';
 import { ref, onMounted } from 'vue';
+import ProfileEditModal from '@/components/ProfileEditModal.vue'; // 경로는 파일 위치에 따라 조정
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
+import { useIdStore } from '@/stores/info';
 
 const user = ref({
   id: '',
@@ -65,9 +96,33 @@ const userId = '1234';
 let lastName = ref('');
 let firstName = ref('');
 
+// ✅ 모달 열림 여부
+const isEditModalOpen = ref(false);
+
+const idStore = useIdStore();
+
+// ✅ 현재 로그인된 사용자 ID
+// const userId = '1234';
+const userId = localStorage.getItem('userId');
+let lastName = ref('');
+let firstName = ref('');
+
+const showPassword = ref(false);
+
+function togglePassword() {
+  showPassword.value = !showPassword.value;
+}
+
+// 사용자 데이터 가져오기
 const fetchUserData = async () => {
   try {
+    const userId = localStorage.getItem('userId');
+
     const response = await axios.get(`http://localhost:3000/members/${userId}`);
+
+    // 이름을 성과 이름으로 분리 (예: "안 태현")
+    const fullName = response.data.name.split('');
+
     user.value = {
       id: response.data.id,
       name: response.data.name,
@@ -77,6 +132,9 @@ const fetchUserData = async () => {
 
     lastName.value = user.value.name.split('')[0];
     firstName.value = user.value.name.split('').slice(1).join('');
+
+    lastName.value = response.data.name.split('')[0]; // 성 (첫 글자)
+    firstName.value = response.data.name.split('').slice(1).join(''); // 이름 (나머지 글자)
   } catch (error) {
     console.error('사용자 데이터를 가져오는 중 오류 발생:', error);
   }
@@ -84,6 +142,10 @@ const fetchUserData = async () => {
 
 const handleSave = async (editedData) => {
   try {
+// ✅ 저장 이벤트 처리 함수
+const handleSave = async (editedData) => {
+  try {
+    // 성과 이름을 결합하여 전체 이름 생성
     const updatedName = `${lastName.value} ${firstName.value}`;
     const updatedData = {
       ...user.value,
@@ -96,11 +158,27 @@ const handleSave = async (editedData) => {
     lastName.value = last;
     firstName.value = first;
     isEditModalOpen.value = false;
+
+    await axios.put(`http://localhost:3000/members/${userId}`, editedData);
+    user.value = { ...editedData }; // 화면에 바로 반영
+
+    // 여기가 문제였습니다! editedData.name을 사용해야 합니다
+    const last = editedData.name.split('')[0];
+    const first = editedData.name.split('').slice(1).join('');
+    lastName.value = last;
+    console.log('🚀 ~ handleSave ~ last:', last);
+    firstName.value = first;
+    console.log('🚀 ~ handleSave ~ first:', first);
+
+    isEditModalOpen.value = false; // 모달 닫기
+
+    console.log('🚀 ~ handleSave ~ user:', user);
   } catch (error) {
     console.error('사용자 정보 저장 실패:', error);
   }
 };
 
+// 페이지 로드 시 데이터 가져오기
 onMounted(() => {
   fetchUserData();
 });
@@ -191,5 +269,17 @@ onMounted(() => {
 }
 .edit-btn:hover {
   background-color: #e6a400;
+
+/* 비밀번호 섹션 */
+.password-section {
+  margin-top: 1.5rem;
+  font-size: 20px;
+}
+.password-section input {
+  margin-left: 20px;
+  margin-right: 10px;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: solid #ddd;
 }
 </style>

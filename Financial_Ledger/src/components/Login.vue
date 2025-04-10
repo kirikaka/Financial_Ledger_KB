@@ -40,11 +40,15 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useIdStore } from '@/stores/info';
 
 const email = ref('');
 const password = ref('');
 const showPassword = ref(false);
 const router = useRouter();
+const userIdPinia = ref('');
+const idStore = useIdStore();
+const { setUserId } = idStore;
 
 function togglePassword() {
   showPassword.value = !showPassword.value;
@@ -56,7 +60,6 @@ function redirectToGoogle() {
 
 async function handleLogin() {
   try {
-
     const res = await axios.get('http://localhost:3000/members');
     const members = res.data;
 
@@ -74,9 +77,16 @@ async function handleLogin() {
 
     alert('로그인 성공!');
 
-    localStorage.setItem('userId', user.id);
+    // localStorage.setItem('userId', user.id);
+    userIdPinia.value = user.id;
+    console.log('🚀 ~ handleLogin ~ user:', user.id);
 
-    router.push('/home');
+    setUserId(userIdPinia.value);
+
+    localStorage.setItem('userId', userIdPinia.value);
+    localStorage.setItem('auth', 'true');
+
+    router.push('/');
   } catch (error) {
     console.error('로그인 오류:', error);
     alert('서버 오류가 발생했습니다.');
