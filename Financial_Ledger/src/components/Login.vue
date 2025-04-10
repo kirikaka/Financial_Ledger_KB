@@ -77,12 +77,13 @@ async function handleLogin() {
 
     alert('로그인 성공!');
 
-    localStorage.setItem('userId', user.id);
+    // localStorage.setItem('userId', user.id);
     userIdPinia.value = user.id;
     console.log('🚀 ~ handleLogin ~ user:', user.id);
 
     setUserId(userIdPinia.value);
 
+    localStorage.setItem('userId', userIdPinia.value);
     localStorage.setItem('auth', 'true');
 
     router.push('/');

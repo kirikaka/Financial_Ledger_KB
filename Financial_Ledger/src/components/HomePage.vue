@@ -55,7 +55,8 @@ const userIdPin = computed(() => {
 
 console.log('🚀 ~ userId wit pinia:', userIdPin.value);
 
-const userId = userIdPin.value;
+const userId = localStorage.getItem('userId');
+console.log('🚀 ~ userId:', userId);
 
 // 사용자 및 거래내역 상태
 const user = ref({ id: '', name: '' });
@@ -143,8 +144,7 @@ const handleLogout = () => {
 onMounted(async () => {
   let savedUserId = userId;
   console.log('🚀 ~ onMounted ~ savedUserId:', savedUserId);
-  ``;
-  let savedUserId = localStorage.getItem('userId');
+  // let savedUserId = localStorage.getItem('userId');
 
   if (!savedUserId) {
     const currentUser = await handleSocialLogin();
