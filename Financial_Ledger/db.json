@@ -213,6 +213,26 @@
       "memo": "rr",
       "income": true,
       "outcome": false
+    },
+    {
+      "id": "e60d",
+      "userId": "d45e",
+      "date": "2025-04-25",
+      "expense": 100000,
+      "category": "교통",
+      "memo": "rrr",
+      "income": false,
+      "outcome": true
+    },
+    {
+      "id": "0728",
+      "userId": "d45e",
+      "date": "2025-04-17",
+      "expense": 100000,
+      "category": "기타",
+      "memo": "rrr",
+      "income": true,
+      "outcome": false
     }
   ]
 }

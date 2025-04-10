@@ -130,6 +130,7 @@ const handleLogout = () => {
 
 // 마운트 시 전체 흐름 제어
 onMounted(async () => {
+  ``;
   let savedUserId = localStorage.getItem('userId');
 
   if (!savedUserId) {
