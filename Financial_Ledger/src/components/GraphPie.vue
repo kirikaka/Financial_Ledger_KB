@@ -42,6 +42,26 @@ const categories = computed(() =>
   isIncome.value ? incomeCategories : expenseCategories
 );
 
+const pastelExpenseColors = [
+  '#FF7A7A', // 연한 빨강
+  '#7AB8FF', // 연한 파랑
+  '#F7C948', // 연한 노랑 (메인 컬러보다 살짝 부드럽게)
+  '#6FD98C', // 연한 초록
+  '#B57EDC', // 연한 보라
+  '#FFB347', // 연한 주황
+];
+
+
+const pastelIncomeColors = [
+  '#FF7A7A', // 연한 빨강
+  '#7AB8FF', // 연한 파랑
+  '#6FD98C', // 연한 초록
+  '#B57EDC', // 연한 보라
+  '#FFB347', // 연한 주황
+
+];
+
+
 // 카테고리별 합산
 const categorySums = computed(() => {
   const result = {};
@@ -64,14 +84,11 @@ const chartData = computed(() => ({
   datasets: [
     {
       data: Object.values(categorySums.value),
-      backgroundColor: [
-        '#FFDD95',
-        '#FFE57F',
-        '#FFD36E',
-        '#FFCD4B',
-        '#FFC107',
-        '#FFB300',
-      ],
+      backgroundColor: isIncome.value
+        ? pastelIncomeColors
+        : pastelExpenseColors,
+      borderColor: '#fff',         // 흰색 테두리
+      borderWidth: 6,              // 테두리 두께 ↑ 여기 조절
     },
   ],
 }));
