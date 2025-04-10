@@ -79,10 +79,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useIdStore } from '@/stores/info';
+
+onMounted(() => {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href =
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+  link.id = 'bootstrap-login-style';
+  document.head.appendChild(link);
+});
+
+onUnmounted(() => {
+  const existing = document.getElementById('bootstrap-login-style');
+  if (existing) {
+    existing.remove(); // 다른 페이지로 이동 시 bootstrap 스타일 제거
+  }
+});
 
 const email = ref('');
 const password = ref('');
@@ -97,6 +113,7 @@ function togglePassword() {
 }
 
 function redirectToGoogle() {
+  localStorage.setItem('auth', 'true');
   window.location.href = 'http://localhost:8080/oauth2/authorization/google';
 }
 

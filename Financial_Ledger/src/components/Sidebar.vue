@@ -120,6 +120,7 @@ const formatNumber = (num) => {
 };
 
 const logout = () => {
+  localStorage.removeItem('userId');
   localStorage.removeItem('auth');
   emit('logout');
   router.push('/login'); // '/' 경로로 이동
