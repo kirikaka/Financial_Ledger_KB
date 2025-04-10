@@ -16,16 +16,20 @@
 
     <div class="financial-info">
       <div class="info-row">
-        <div class="info-label">총수입 : +{{ formatNumber(totalIncome) }}</div>
+        <div class="info-label income">
+          총수입 : + {{ formatNumber(totalIncome) }}
+        </div>
         <div class="info-value income"></div>
       </div>
       <div class="info-row">
-        <div class="info-label">총지출 : -{{ formatNumber(totalExpense) }}</div>
+        <div class="info-label outcome">
+          총지출 : - {{ formatNumber(totalExpense) }}
+        </div>
         <div class="info-value expense"></div>
       </div>
-      <div class="info-row">
-        <div class="info-value" :class="netProfit >= 0 ? 'income' : 'expense'">
-          손이익 : {{ netProfit >= 0 ? '+' : '-'
+      <div class="info-row profit">
+        <div class="info-value profit">
+          순이익 : {{ netProfit >= 0 ? '+' : '-'
           }}{{ formatNumber(Math.abs(netProfit)) }}
         </div>
       </div>
@@ -242,7 +246,25 @@ onMounted(() => {
 .info-row {
   display: flex;
   align-items: center;
+  /* letter-spacing: 1.5px; */
 }
+.info-value.profit {
+  color: rgb(255, 254, 254);
+}
+.info-label.income {
+  color: rgb(144, 144, 255);
+}
+.info-label.outcome {
+  color: rgb(255, 86, 86);
+}
+
+/* .info-label.income {
+  color: rgb(0, 0, 255);
+}
+.info-label.outcome {
+  color: rgb(255, 0, 0);
+} */
+
 .settings-row {
 }
 </style>
