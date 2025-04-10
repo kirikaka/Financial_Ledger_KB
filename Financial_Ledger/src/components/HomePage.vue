@@ -42,8 +42,20 @@ import GraphPie from '@/components/GraphPie.vue';
 import Calendar from '@/components/Calendar.vue';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'vue-router';
+import { useIdStore } from '@/stores/info';
 
 const router = useRouter(); // 리디렉션을 위한 router 사용
+
+const idStore = useIdStore();
+
+// const userId = localStorage.getItem('userId');
+const userIdPin = computed(() => {
+  return idStore.userIdPinia;
+});
+
+console.log('🚀 ~ userId wit pinia:', userIdPin.value);
+
+const userId = userIdPin.value;
 
 // 사용자 및 거래내역 상태
 const user = ref({ id: '', name: '' });
@@ -118,7 +130,6 @@ const handleLogout = () => {
   // 모든 정보 초기화
   user.value = { id: '', name: '' };
   allTransactions.value = [];
-  localStorage.removeItem('userId');
 
   // 쿠키 제거 (토큰 초기화)
   document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -130,6 +141,8 @@ const handleLogout = () => {
 
 // 마운트 시 전체 흐름 제어
 onMounted(async () => {
+  let savedUserId = userId;
+  console.log('🚀 ~ onMounted ~ savedUserId:', savedUserId);
   ``;
   let savedUserId = localStorage.getItem('userId');
 
