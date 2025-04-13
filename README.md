@@ -61,8 +61,8 @@ npm run dev
 ## 기술 스택
 
 - **프론트엔드**: Vue.js
-- **백엔드**: Json-server
-- **스타일링**: Tailwind CSS
+- **백엔드**: Json-server, JWT
+- **스타일링**: CSS, Bootstrap
 
 ## 기여 방법
 
